@@ -2,3 +2,7 @@ site_name: Learn Data Engineering
 site_url: https://karlchris.github.io/learn-data-engineering/
 theme:
   name: material
+
+nav:
+  - Data Modeling: 'data-modelling/README.md'
+  - Learning Python: 'learning-python/README.md'
