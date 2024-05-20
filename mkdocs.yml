@@ -1,0 +1,4 @@
+site_name: Learn Data Engineering
+site_url: https://karlchris.github.io/learn-data-engineering/
+theme:
+  name: material
