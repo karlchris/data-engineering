@@ -15,7 +15,7 @@ repo_url: https://github.com/karlchris/learn-data-engineering
 theme:
   name: material
 
-  favicon: assets/img/favicon.ico
+  favicon: assets/img/database-storage.png
   logo: assets/img/logo.svg
 
   font:
@@ -28,15 +28,22 @@ theme:
     - toc.integrate
 
   palette:
-    # Light mode
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: light
+      scheme: default 
       toggle:
-        icon: material/weather-sunny
-        name: Once you start down the dark path, forever it will dominate your destiny
-    # Dark mode
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
-      scheme: dark
+      scheme: slate
       toggle:
-        icon: material/weather-night
-        name: Happiness can be found even in the darkest of times, if one remembers to put on the light
+        icon: material/brightness-4
+        name: Switch to system preference
