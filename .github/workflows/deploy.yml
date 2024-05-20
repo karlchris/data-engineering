@@ -1,9 +1,8 @@
-name: ci 
+name: deploy-gh-page
 on:
   push:
     branches:
-      - master 
-      - main
+      - master
 permissions:
   contents: write
 jobs:
