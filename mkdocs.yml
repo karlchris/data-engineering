@@ -1,8 +1,42 @@
 site_name: Learn Data Engineering
 site_url: https://karlchris.github.io/learn-data-engineering/
+
+nav:
+  - Overview: 'docs/index.md'
+  - Data Modeling:
+    - 'docs/data-modeling/README.md'
+    - Dimensional Modeling: 'docs/data-modeling/dimensional-modeling/README.md'
+    - DDL vs. DML: 'docs/data-modeling/ddl-vs-dml/README.md'
+    - Query Life Cycle: 'docs/data-modeling/query-lifecycle/README.md'
+
+# Github spec
+repo_url: https://github.com/karlchris/learn-data-engineering
+
 theme:
   name: material
 
-nav:
-  - Data Modeling: 'docs/data-modeling/README.md'
-  - Learning Python: 'docs/learning-python/README.md'
+  favicon: assets/img/favicon.ico
+  logo: assets/img/logo.svg
+
+  font:
+    text: Fira Sans
+    code: Fira Code
+
+  features:
+    - navigation.instant
+    - navigation.top
+    - toc.integrate
+  
+    palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: light
+      toggle:
+        icon: material/weather-sunny
+        name: Once you start down the dark path, forever it will dominate your destiny
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: dark
+      toggle:
+        icon: material/weather-night
+        name: Happiness can be found even in the darkest of times, if one remembers to put on the light
