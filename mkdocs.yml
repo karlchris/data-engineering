@@ -4,5 +4,5 @@ theme:
   name: material
 
 nav:
-  - Data Modeling: 'data-modelling/README.md'
-  - Learning Python: 'learning-python/README.md'
+  - Data Modeling: 'docs/data-modeling/README.md'
+  - Learning Python: 'docs/learning-python/README.md'
