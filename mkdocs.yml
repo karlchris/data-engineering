@@ -26,8 +26,8 @@ theme:
     - navigation.instant
     - navigation.top
     - toc.integrate
-  
-    palette:
+
+  palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
       scheme: light
