@@ -16,4 +16,4 @@ Then, run
 make dev
 ```
 
-it will run the docker image and expose the port to `localhost:8000`.
+it will run the docker image and expose the port to `http://0.0.0.0:8000/learn-data-engineering/`.
