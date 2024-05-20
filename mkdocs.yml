@@ -2,12 +2,12 @@ site_name: Learn Data Engineering
 site_url: https://karlchris.github.io/learn-data-engineering/
 
 nav:
-  - Overview: 'docs/index.md'
+  - Overview: 'index.md'
   - Data Modeling:
-    - 'docs/data-modeling/README.md'
-    - Dimensional Modeling: 'docs/data-modeling/dimensional-modeling/README.md'
-    - DDL vs. DML: 'docs/data-modeling/ddl-vs-dml/README.md'
-    - Query Life Cycle: 'docs/data-modeling/query-lifecycle/README.md'
+    - 'data-modeling/README.md'
+    - Dimensional Modeling: 'data-modeling/dimensional-modeling/README.md'
+    - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
+    - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
 
 # Github spec
 repo_url: https://github.com/karlchris/learn-data-engineering
