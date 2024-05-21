@@ -17,8 +17,26 @@ theme:
 
   features:
     - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.instant.preview
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
     - navigation.top
+    - navigation.footer
     - toc.integrate
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+    - search.suggest
+    - search.highlight
+    - search.share
 
   palette:
     # Palette toggle for automatic mode
@@ -55,15 +73,28 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.snippets
   - pymdownx.inlinehilite
   - pymdownx.keys
   - pymdownx.mark
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tilde
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - toc:
       permalink: ⚓︎
+  - tables
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
 
 
 nav:
