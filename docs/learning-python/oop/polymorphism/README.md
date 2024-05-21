@@ -89,4 +89,4 @@ print("Area of circle is:", str(shapes[1].getArea()))
 
 ## Challenges
 
-- Follow on [Task: Implement Animal Class](task.py) for the problem statement and [Solution](solution.py) for the solution
+- Follow on [Task: Implement Animal Class](task.py){:target="\_blank"} for the problem statement and [Solution](solution.py){:target="\_blank"} for the solution
