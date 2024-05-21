@@ -1,4 +1,4 @@
-MKDM_VERSION=7.2.6
+MKDM_VERSION=9.5.24
 PWD=`pwd`
 PORT=8000
 IMG=learn-de-kchrs
