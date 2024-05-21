@@ -1,9 +1,9 @@
-site_name: Learn Data Engineering
-site_url: https://karlchris.github.io/learn-data-engineering/
+site_name: Data Engineering
+site_url: https://karlchris.github.io/data-engineering/
 
 
 # Github spec
-repo_url: https://github.com/karlchris/learn-data-engineering
+repo_url: https://github.com/karlchris/data-engineering
 
 theme:
   name: material
