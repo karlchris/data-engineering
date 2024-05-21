@@ -21,4 +21,6 @@ Overview:
 2. Next, data is transformed from its original format into a format for the downstream use cases.
 3. Last, the transformed data is fed into different business intelligence (BI) tools to draw business insights.
 
-Reference: [Educative - Data Engineering Life Cycle](https://www.educative.io/courses/data-engineering-foundations/introduction-to-data-engineering-life-cycle)
+!!! info
+
+    Reference: [Educative - Data Engineering Life Cycle](https://www.educative.io/courses/data-engineering-foundations/introduction-to-data-engineering-life-cycle)
