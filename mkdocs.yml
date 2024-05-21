@@ -101,7 +101,9 @@ nav:
   - Overview: 'index.md'
   - Data Modeling:
     - What is it?: 'data-modeling/README.md'
-    - Dimensional Modeling: 'data-modeling/dimensional-modeling/README.md'
+    - Dimensional Modeling: 
+      - 'data-modeling/dimensional-modeling/README.md'
+      - Challenge: 'data-modeling/dimensional-modeling/challenge.md'
     - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
   - Learning Python:
