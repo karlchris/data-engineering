@@ -1,14 +1,14 @@
-# About the Author
+# About the Author :bust_in_silhouette:
 
 ![Karl photo](assets/img/photo_small.jpeg)
 
-_Halo_, I am Karl Christian :wave:
+_Halo_, I am [Karl Christian](https://www.linkedin.com/in/karllchris/) :wave:
 
-Expert in data engineering, problem solving and building a platform.
+Expert in data engineering, problem solving and building a platform. :computer:
 
 On a mission to democratize access to data, provide analytics as a platform, and building data driven framework as a mindset.
 
-## Experiences
+## Experiences :briefcase:
 
 ### [Careem](https://www.careem.com/) - Senior Data Warehouse Engineer
 
@@ -54,13 +54,13 @@ Location: Jakarta, Indonesia
 - Build monitoring dashboard for Enterprise performance using Tableau and GCP to support Strategy team decision making.
 - Implementing Batch processing to preprocess raw data into refined data warehouse using Airflow and BigQuery.
 
-## Education
+## Education :school:
 
 Bachelor of Science (Engineering major), [ITB](https://www.itb.ac.id/), 2012 - 2016
 
 _First Class Honour, Cum Laude_
 
-## Projects
+## Projects :rocket:
 
 ### Build Grocery Datamart and integrations to external
 
@@ -117,7 +117,7 @@ Company: Tokopedia
 
 > Skills: Tableau, Airflow, GCP
 
-## Certifications
+## Certifications :bookmark:
 
 - [Educative - Docker for Developers](https://www.educative.io/verify-certificate/r0w3pLtnWZ5LgVKopIQ5mqOQp446U6)
 - [Educative - Deploying a Web Application over Kubernetes](https://www.educative.io/verify-certificate/y8E3zVt2ZL7Bq0VxgSyzvm0y2QQgcm)
@@ -125,3 +125,30 @@ Company: Tokopedia
 - [Educative - Learn Object-Oriented Programming in Python](https://www.educative.io/verify-certificate/j2l3BzfZn5G0MVK7rFxzJkBxy552FA)
 - [Educative - Mastering Unit Testing with Pytest](https://www.educative.io/verify-certificate/wnDQEXnKW6AFPwvpj9R0RjcQLAwmQ2994UG)
 - [Linkedin Learning - Analyzing Big Data with Hive](https://www.linkedin.com/learning/certificates/2f65729dd55b0e2e9dce9232c9e9327a2f53f50a60464d081296372b735d214d?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3BydX6llRCQJeNV2NHM0hVAA%3D%3D)
+
+## Volunteering :muscle:
+
+### Instructor - Data, Business & Analytics
+
+_February 2022 - May 2022_
+
+Part of Ruangguru x Kampus Merdeka
+
+Teaching about:
+
+- Data Analytics
+- Product Analytics
+- Analytics framework
+- Defining OKR & KPI
+
+> Technical skills: SQL, Python, Tableau.
+
+### Mentor at [Google Bangkit](https://grow.google/intl/id_id/bangkit/?tab=machine-learning)
+
+_January 2020 - June 2020_
+
+Google Bangkit is a program to educate machine learning to all enthusiast in Indonesia, so we can apply ML better in every aspects of Indonesia together.
+
+Google Bangkit is coordinated by Google itself, and with the help of 4 unicorns in Indonesia (Traveloka, Gojek, Tokopedia, and Bukalapak), they help by becoming the volunteers as mentor.
+
+This is very pleasant experiences even for me, understanding variety of data savvy in Indonesia people and nurture them to become machine learning enthusiast.
