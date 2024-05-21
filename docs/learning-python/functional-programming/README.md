@@ -130,7 +130,43 @@ reduce(f, [1, 2, 3, 4, 5])
 
 ## Challenge
 
-- Follow on [Task](task.py) for the problem statement.
-- Check [Solution](solution.py) for the solution.
+- Follow on `Task` below for the problem statement.
+- Check `Solution`
+
+=== "Task"
+
+    ```python
+    """
+        Filter ONLY Even numbers
+
+        task 1
+            Create a function to identify even number
+            Hint: use modulo '%'
+
+        task 2
+            use filter() to map the function into iterable
+    """
+
+    numbers = list(range(100))
+
+    def is_even(x):
+        # task 1 here
+        pass
+
+    # task 2 here
+    ```
+
+=== "Solution"
+
+    ```python
+    """ Solution: Filter ONLY Even numbers """
+
+    numbers = list(range(100))
+
+    def is_even(x):
+        return x % 2 == 0
+
+    print(list(filter(is_even, numbers)))
+    ```
 
 Reference: [Functional Programming in Python](https://realpython.com/python-functional-programming/#what-is-functional-programming)

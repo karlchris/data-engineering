@@ -42,20 +42,18 @@ print(divide_numbers(10, 0)) # Output: Error: Division by zero is not allowed!
 
 Python provides a variety of built-in exceptions that cover a wide range of error conditions, such as: `TypeError`, `ValueError`, `FileNotFoundError`, etc
 
-## Pytest - Exception Testing
+## Check it out
 
-- check the [division.py](division.py)
+- Let's see below `division.py` and its test case.
 
-```python
+```python title="division.py"
 def divide_numbers(a, b):
     if b == 0:
         raise ZeroDivisionError("Cannot divide by zero")
     return a / b
 ```
 
-- check the [test_file.py](test_file.py)
-
-```python
+```python title="test_file.py"
 import pytest
 
 from division import divide_numbers
@@ -68,12 +66,12 @@ def test_divide_numbers():
 - to test it out, run
 
 ```bash
-docker build -t pytest-exceptions exceptions/ && docker run pytest-exceptions
+docker build -t pytest-exceptions docs/learning-python/unit-testing/exceptions/ && docker run pytest-exceptions
 ```
 
 ## Result
 
-```text
+```bash
 ============================= test session starts ==============================
 platform linux -- Python 3.9.19, pytest-8.2.0, pluggy-1.5.0
 rootdir: /test

@@ -51,5 +51,143 @@ The initializer is automatically called when an object of the class is created. 
 
 ## Challenges
 
-- Follow on [Task 1: Calculate Student Performance](task_1.py) for the problem statement and [Solution 1](solution_1.py) for the solution
-- Follow on [Task 2: Implement Calculator Class](task_2.py) for the problem statement and [Solution 2](solution_2.py) for the solution
+- Take a look on **Task: Calculate Student Performance** and its solution
+
+=== "Task 1"
+
+    ```python
+    """
+        Calculate Student Performance
+
+        Problem statement
+            Implement a class - Student - that has four properties and two methods. All these attributes (properties and methods) should be public. This problem can be broken down into three tasks.
+
+        Task 1
+            Implement a constructor to initialize the values of four properties: name, phy, chem, and bio.
+
+        Task 2
+            Implement a method – totalObtained – in the Student class that calculates total marks of a student.
+
+        Task 3
+            Using the totalObtained method, implement another method, percentage, in the Student class that calculates the percentage of students marks.
+            Assume that the total marks of each subject are 100. The combined marks of three subjects are 300.
+            Formula: percentage = (marks_obtained/total_marks) * 100
+    """
+
+    class Student:
+        def __init__(self):
+            pass # to fill
+
+        def totalObtained(self):
+            pass # to fill
+
+        def percentage(self):
+            pass # to fill
+    ```
+
+=== "Solution"
+
+    ```python
+    class Student:
+        def __init__(self, name, phy, chem, bio):
+            self.name = name
+            self.phy = phy
+            self.chem = chem
+            self.bio = bio
+
+        def totalObtained(self):
+            return(self.phy + self.chem + self.bio)
+
+        def percentage(self):
+            return((self.totalObtained() / 300) * 100)
+    ```
+
+- Let's continue to **Task: Implement Calculator Class** and its solution
+
+=== "Task 2"
+
+    ```python
+    """
+        Implement Calculator Class
+
+        Write a Python class called Calculator by completing the tasks below:
+
+        Task 1
+            Initializer
+            Implement an initializer to initialize the values of num1 and num2.
+
+        Properties
+            num1
+            num2
+
+        Task 2
+            Methods
+                add() is a method that returns the sum of num1 and num2.
+                subtract() is a method that returns the subtraction of num1 from num2.
+                multiply() is a method that returns the product of num1 and num2.
+                divide() is a method that returns the division of num2 by num1.
+
+        Input
+            Pass numbers (integers or floats) in the initializer.
+
+        Output
+            addition, subtraction, division, and multiplication
+
+        Sample input
+            obj = Calculator(10, 94);
+            obj.add()
+            obj.subtract()
+            obj.multiply()
+            obj.divide()
+
+        Sample output
+            104
+            84
+            940
+            9.4
+    """
+
+    class Calculator:
+        def __init__(self):
+            pass
+
+        def add(self):
+            pass
+
+        def subtract(self):
+            pass
+
+        def multiply(self):
+            pass
+
+        def divide(self):
+            pass
+    ```
+
+=== "Solution"
+
+    ```python
+    class Calculator:
+        def __init__(self, num1, num2):
+            self.num1 = num1
+            self.num2 = num2
+
+        def add(self):
+            return (self.num2 + self.num1)
+
+        def subtract(self):
+            return (self.num2 - self.num1)
+
+        def multiply(self):
+            return (self.num2 * self.num1)
+
+        def divide(self):
+            return (self.num2 / self.num1)
+
+
+    demo1 = Calculator(10, 94)
+    print("Addition:", demo1.add())
+    print("Subtraction:", demo1.subtract())
+    print("Mutliplication:", demo1.multiply())
+    print("Division:", demo1.divide())
+    ```

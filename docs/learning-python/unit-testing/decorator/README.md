@@ -60,16 +60,16 @@ def test_eval(test_input, expected_output):
 
 Using `@pytest.mark.usefixtures` decorator can be beneficial when we want to reuse a fixture across multipple tests or ensure that a fixture is always used in a particular test.
 
-```python
-# conftest.py
-
+```python title="conftest.py"
 import pytest
 
 @pytest.fixture
 def my_fixture():
     return [1,2,3]
+```
 
-# test_file.py
+```python title="test_file.py"
+import pytest
 
 @pytest.mark.usefixtures("my_fixture")
 def test_with_fixtures():

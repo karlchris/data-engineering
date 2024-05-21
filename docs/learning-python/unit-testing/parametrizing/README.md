@@ -7,16 +7,12 @@ This feature is especially useful when we want to test a function with varying i
 
 The main benefit of this is concise code.
 
-```python
-# main.py
-
+```python title="main.py"
 def multiply(x, y):
     return x * y
 ```
 
-```python
-# test_file.py
-
+```python title="test_file.py"
 import pytest
 from main import multiply
 
@@ -35,12 +31,12 @@ Given you an example to test Python class in [main.py](main.py).
 - run command
 
 ```bash
-docker build -t pytest-parametrizing parametrizing/ && docker run pytest-parametrizing
+docker build -t pytest-parametrizing docs/learning-python/unit-testing/parametrizing/ && docker run pytest-parametrizing
 ```
 
 ## Result
 
-```text
+```bash
 ============================= test session starts ==============================
 platform linux -- Python 3.9.19, pytest-8.2.0, pluggy-1.5.0
 rootdir: /test

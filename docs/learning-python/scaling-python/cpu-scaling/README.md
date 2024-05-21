@@ -70,9 +70,92 @@ if __name__ == "__main__":
 
 ![image](../pics/multiprocessing.png)
 
-## Challenges
+## Challenge
 
-- Follow on [Task](task.py) for the problem statement.
-- Check [Solution](solution.py) for the solution.
+- Follow below task and its solution.
 
-> This challenge is using `threads` as its simplest approach, if you want to challenge yourself further, you can try to use `multiprocessing` library, which I believe, it should be simpler and cleaner code.
+=== "Task"
+
+    ```python
+    """
+        Problem
+            You are given a list of one million integers named mylist.
+
+            However, since we have studied that parallelism can be used to utilize more cores of the CPU to compute the result faster we know that the simplest way to parallelize a program is to use use threads.
+
+        One thing to keep in mind while using threads is that the tasks assigned to the threads should be independent of the task of other threads.
+        In other words, you have to divide your problem into smaller non-overlapping chunks that can be done independently.
+
+        Hint: A list can be divided into many partitions and the min of all the chunks can be computed separately.
+        Then, the min of the computed mins of all chunks will be the global minimum.
+    """
+
+    # Relevant libraries are imported already
+    import random
+    import threading
+
+    # mylist contains 1 million entries ranging from 1 to 100000000
+    mylist = [random.randint(1, 100000000) for i in range(1000000)]
+    minimum = 0
+    ########
+    # Your code goes here #
+
+
+    #   Code until here   #
+    ########
+
+    # Result:
+    print("Global Minimum: ", minimum)
+    ```
+
+=== "Solution"
+
+    ```python
+    """
+        First of all the mylist can be divided into non-overlaping chunks.
+        Then, the minimum of each chunk can be computed separately.
+        We use threads to compute the minimum of each of the four chunks and store all four minimums in the mins list.
+        Finally, we calculate the minimum of those four minimums which is the global minimum of the list.
+    """
+
+    import random
+    import threading
+
+    mylist = [random.randint(1, 100000000) for i in range(1000000)]
+    mins = []
+
+    def calc_min(li):
+        minimum = li[0]
+        for x in li:
+            if x < minimum:
+                minimum = x
+
+        mins.append(minimum)
+
+    # Dividing list in halves
+    l1 = mylist[:len(mylist)//2]
+    l2 = mylist[len(mylist)//2:]
+
+    # Dividing list in quaters
+    q1 = l1[:len(l1)//2]
+    q2 = l1[len(l1)//2:]
+    q3 = l2[:len(l2)//2]
+    q4 = l2[len(l2)//2:]
+
+    workers = []
+    workers.append( threading.Thread(target=calc_min, args=(q1,)) )
+    workers.append( threading.Thread(target=calc_min, args=(q2,)) )
+    workers.append( threading.Thread(target=calc_min, args=(q3,)) )
+    workers.append( threading.Thread(target=calc_min, args=(q4,)) )
+
+    for worker in workers:
+        worker.start()
+    for worker in workers:
+        worker.join()
+
+    print("Global Minimum: ", min(mins))
+    ```
+
+!!! tip
+
+    This challenge is using `threads` as its simplest approach, if you want to challenge yourself further, you can try to use `multiprocessing` library, which I believe, it should be simpler and cleaner code.

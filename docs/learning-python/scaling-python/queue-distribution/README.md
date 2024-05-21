@@ -25,11 +25,11 @@ The letter _R_ and _Q_ are used to designate _Redis_ and _Queue_.
 
 By using RQ, an application can push jobs into a Redis database and have workers executing these jobs asynchronously.
 
-> You can only run below code once redis server is already run.
+!!! warning
 
-```python
-# rq-enqueue.py
+    You can only run below code once redis server is already run.
 
+```python title="rq-enqueue.py"
 import time
 from rq import Queue
 from redis import Redis
@@ -64,9 +64,7 @@ Remote workers then execute the tasks, putting the task results into the backend
 
 When called, a task returns a `celery.result.AsyncResult` object.
 
-```python
-# celery-task.py
-
+```python title="celery-task.py"
 import celery
 
 app = celery.Celery('celery-task',
@@ -106,9 +104,7 @@ _Celery_ supports chaining tasks, which allows you to build more complex workflo
 
 ## `celery.chain`
 
-```python
-# celery-chain.py
-
+```python title="celery-chain.py"
 import celery
 
 app = celery.Celery('celery-task',
@@ -148,9 +144,7 @@ This feature makes it possible to have finer control over the distribution of th
 For example, it's common to have a queue dedicated to low-priority jobs, where only a few workers are available.
 Notice the new _options_ in the worker command `--queues celery, low-priority`.
 
-```python
-# celery-task-queue.py
-
+```python title="celery-task-queue.py"
 import celery
 
 app = celery.Celery('celery-task-queue',
@@ -174,4 +168,6 @@ to start the workers with queue low-priority and tag `celery`
 celery -A celery-task-queue worker --queues celery,low-priority
 ```
 
-> You might be familiar with this backend concept as you're using [Airflow](https://airflow.apache.org/) as much as building the pipelines.
+!!! tip
+
+    You might be familiar with this backend concept as you're using [Airflow](https://airflow.apache.org/) as much as building the pipelines.

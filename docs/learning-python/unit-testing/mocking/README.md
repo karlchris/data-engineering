@@ -17,9 +17,7 @@ In below example, we define a mock response object with a JSON method that retur
 It will use `monkeypatch` to replace `requests.get` with our mock response object
 so that when `get_data` is called, it returns our mock response instead of making a real API request.
 
-```python
-# main.py
-
+```python title="main.py"
 import requests
 
 def get_json(url):
@@ -27,9 +25,7 @@ def get_json(url):
     return r # in case of valid API Url, we will return r.json()
 ```
 
-```python
-# test.py
-
+```python title="test_main.py"
 import requests
 from main import get_json
 
@@ -48,8 +44,7 @@ def test_get_json(monkeypatch):
 
 We need to use plugin `pytest-mock`, it's a pytest plugin that offers an easier-to-use API and integrates seamlessly with pytest fixtures.
 
-```python
-# main.py
+```python title="main.py"
 def divide(a, b):
     return a / b
 
@@ -58,7 +53,7 @@ def compute(a, b):
     return result * 100
 ```
 
-```python
+```python title="test_main.py"
 import pytest
 from main import compute
 
@@ -99,17 +94,52 @@ def test_my_function_2(mocker):
 **Mocking context managers** is a common technique in testing for isolating the code being tested from its external dependencies.
 Context managers are objects that define how a particular block of code should be managed.
 
-- main module is in [my_module.py](my_module.py)
-- test cases is in [test_my_module.py](test_my_module.py)
+- we will test `my_module.py` with its test cases `test_my_module.py`
+
+```python title="my_module.py"
+class FileManager:
+    def __init__(self, filename):
+        self.filename = filename
+
+    def __enter__(self):
+        self.file = open(self.filename, 'r')
+        return self.file
+
+    def __exit__(self, exc_type, exc_value, tb):
+        self.file.close()
+
+def count_lines_in_file(filename):
+    with FileManager(filename) as file:
+        return len(file.readlines())
+```
+
+```python title="test_my_module.py"
+import io
+import my_module
+import pytest
+
+def test_count_lines_in_file(mocker):
+    mock_file_manager = mocker.MagicMock()
+    mock_file = mocker.MagicMock(spec=io.IOBase)
+    mock_file_manager.return_value.__enter__.return_value = mock_file
+
+    mocker.patch('my_module.FileManager', mock_file_manager)
+
+    # Set up the mock file to return 5 lines
+    mock_file.readlines.return_value = ['line\n'] * 5
+
+    assert my_module.count_lines_in_file('filename.txt') == 5
+```
+
 - run command
 
 ```bash
-docker build -t pytest-mocking mocking/ && docker run pytest-mocking
+docker build -t pytest-mocking docs/learning-python/unit-testing/mocking/ && docker run pytest-mocking
 ```
 
 ## Result
 
-```text
+```bash
 ============================= test session starts ==============================
 platform linux -- Python 3.9.19, pytest-8.2.0, pluggy-1.5.0
 rootdir: /test

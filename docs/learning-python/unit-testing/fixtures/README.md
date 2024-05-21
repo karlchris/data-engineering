@@ -16,8 +16,7 @@ Fixtures defined in a `conftest.py` file can be used by any test without importi
 
 fixtures are defined using `@pytest.fixture` decorator.
 
-```python
-# test_file.py
+```python title="test_file.py"
 def test_data(data): # this test will pass
     assert 'key' in data
 
@@ -25,8 +24,7 @@ def test_list(lst): # this test will fail and list fixture will be printed
     assert len(lst) == 5, lst
 ```
 
-```python
-# conftest.py
+```python title="conftest.py"
 import pytest
 
 @pytest.fixture

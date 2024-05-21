@@ -119,13 +119,68 @@ results = loop.run_until_complete(asyncio.gather(*coroutines))
 print("Results: %s" % results)
 ```
 
-## Challenges
+## Challenge
 
-- Follow on [Task](task.py) for the problem statement.
-- Check [Solution](solution.py) for the solution.
+- Follow below task and its solution.
 
-run command
+=== "Task"
+
+    ```python
+    """
+        Problem
+            When a webpage loads, its base HTML page has a bunch of resources that the browser needs to fetch in order to display the page completely.
+            However, the time that the browser takes to fetch all those resources determines its quality.
+
+        In this challenge, suppose you are writing code for building a browser.
+        You have to fetch three URLs: http://educative.io, http://educative.io/blog, and http://youtube.com.
+
+        Hint: You can use asyncio and aiohttp.
+    """
+
+    ## Import other libraries if you want (asyncio and aiohttp are supported)
+    import time
+
+    urls = ["http://educative.io", "http://educative.io/blog", "http://youtube.com"]
+
+    ##########################################
+    ### Start your code here
+
+
+    ### End code here
+    ##########################################
+    print("Results: %s" % results)
+    ```
+
+=== "Solution"
+
+    ```python
+    import aiohttp
+    import asyncio
+    import time
+
+    urls = ["http://educative.io", "http://educative.io/blog", "http://youtube.com"]
+
+    async def get(url):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                return response
+
+    loop = asyncio.get_event_loop()
+
+    coroutines = []
+
+    for URL in urls:
+        coroutines.append( get(URL))
+
+    start_time = time.time()
+    results = loop.run_until_complete(asyncio.gather(*coroutines))
+    print("--- %s milliseconds ---" % ((time.time() - start_time)*1000))
+
+    print("Results: %s" % results)
+    ```
+
+- run command
 
 ```bash
-docker build -t async async-solution/ && docker run async
+docker build -t async docs/learning-python/scaling-python/async-solution/ && docker run async
 ```

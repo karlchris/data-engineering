@@ -7,18 +7,16 @@ This can be very helpful in writing unit tests to verify if the expected results
 assert condition, message
 ```
 
-## Steps
+## Check it out
 
-- go to [addition.py](addition.py) to check the function to test.
+- Let's see below `addition.py` and its test case.
 
-```python
+```python title="addition.py"
 def addition(x, y):
     return x + y
 ```
 
-- go to [test_file.py](test_file.py) for the test cases.
-
-```python
+```python title="test_file.py"
 from addition import addition
 
 def test_addition_int():
@@ -32,12 +30,12 @@ def test_addition_str():
 - to test it out, run
 
 ```bash
-docker build -t pytest-assertion assertion/ && docker run pytest-assertion
+docker build -t pytest-assertion docs/learning-python/unit-testing/assertion/ && docker run pytest-assertion
 ```
 
 ## Result
 
-```text
+```bash
 ============================= test session starts ==============================
 platform linux -- Python 3.9.19, pytest-8.2.0, pluggy-1.5.0
 rootdir: /test
