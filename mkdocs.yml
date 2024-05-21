@@ -29,7 +29,7 @@ theme:
     - navigation.indexes
     - navigation.top
     - navigation.footer
-    - toc.integrate
+    - toc.extend
     - content.code.copy
     - content.code.select
     - content.code.annotate
