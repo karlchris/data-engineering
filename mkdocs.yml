@@ -1,36 +1,6 @@
 site_name: Learn Data Engineering
 site_url: https://karlchris.github.io/learn-data-engineering/
 
-nav:
-  - Overview: 'index.md'
-  - Data Modeling:
-    - What is it?: 'data-modeling/README.md'
-    - Dimensional Modeling: 'data-modeling/dimensional-modeling/README.md'
-    - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
-    - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
-  - Learning Python:
-    - Why Python?: 'learning-python/README.md'
-    - Object Oriented Programming:
-      - What is it?: 'learning-python/oop/README.md'
-      - Class: 'learning-python/oop/class/README.md'
-      - Encapsulation: 'learning-python/oop/encapsulation/README.md'
-      - Inheritance: 'learning-python/oop/inheritance/README.md'
-      - Polymorphism: 'learning-python/oop/polymorphism/README.md'
-      - Object Relationship: 'learning-python/oop/object-relationship/README.md'
-    - Functional Programming: 'learning-python/functional-programming/README.md'
-    - Unit Testing:
-      - What is it?: 'learning-python/unit-testing/README.md'
-      - Assertion: 'learning-python/unit-testing/assertion/README.md'
-      - Exceptions: 'learning-python/unit-testing/exceptions/README.md'
-      - Fixtures: 'learning-python/unit-testing/fixtures/README.md'
-      - Decorator: 'learning-python/unit-testing/decorator/README.md'
-      - Parametrizing: 'learning-python/unit-testing/parametrizing/README.md'
-      - Mocking: 'learning-python/unit-testing/mocking/README.md'
-    - Scaling Python:
-      - What is it?: 'learning-python/scaling-python/README.md'
-      - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
-      - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
-      - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
 
 # Github spec
 repo_url: https://github.com/karlchris/learn-data-engineering
@@ -38,8 +8,8 @@ repo_url: https://github.com/karlchris/learn-data-engineering
 theme:
   name: material
 
-  favicon: assets/img/database-storage.png
-  logo: assets/img/database-storage.png
+  favicon: assets/img/database-storage.ico
+  logo: assets/img/database-storage.ico
 
   font:
     text: Fira Sans
@@ -70,3 +40,59 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
+
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tabbed
+  - pymdownx.tilde
+  - pymdownx.superfences
+  - toc:
+      permalink: ⚓︎
+
+
+nav:
+  - Overview: 'index.md'
+  - Data Modeling:
+    - What is it?: 'data-modeling/README.md'
+    - Dimensional Modeling: 'data-modeling/dimensional-modeling/README.md'
+    - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
+    - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
+  - Learning Python:
+    - Why Python?: 'learning-python/README.md'
+    - Object Oriented Programming:
+      - What is it?: 'learning-python/oop/README.md'
+      - Class: 'learning-python/oop/class/README.md'
+      - Encapsulation: 'learning-python/oop/encapsulation/README.md'
+      - Inheritance: 'learning-python/oop/inheritance/README.md'
+      - Polymorphism: 'learning-python/oop/polymorphism/README.md'
+      - Object Relationship: 'learning-python/oop/object-relationship/README.md'
+    - Functional Programming: 'learning-python/functional-programming/README.md'
+    - Unit Testing:
+      - What is it?: 'learning-python/unit-testing/README.md'
+      - Assertion: 'learning-python/unit-testing/assertion/README.md'
+      - Exceptions: 'learning-python/unit-testing/exceptions/README.md'
+      - Fixtures: 'learning-python/unit-testing/fixtures/README.md'
+      - Decorator: 'learning-python/unit-testing/decorator/README.md'
+      - Parametrizing: 'learning-python/unit-testing/parametrizing/README.md'
+      - Mocking: 'learning-python/unit-testing/mocking/README.md'
+    - Scaling Python:
+      - What is it?: 'learning-python/scaling-python/README.md'
+      - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
+      - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
+      - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
