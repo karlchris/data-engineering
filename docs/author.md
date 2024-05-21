@@ -62,55 +62,66 @@ _First Class Honour, Cum Laude_
 
 ## Projects
 
-- **Careem - Build Grocery Datamart and integrations to external**
+### Build Grocery Datamart and integrations to external
 
-  > Build Grocery data mart based on stakeholder requirements and business use cases, optimized the pipeline and delivery to have high reliability and scalable.
+Company: Careem
 
-  > Created the design pattern on how to implement jobs in DAG, so it's testable and scalable, which increase reliability.
+- Build Grocery data mart based on stakeholder requirements and business use cases, optimized the pipeline and delivery to have high reliability and scalable.
+- Created the design pattern on how to implement jobs in DAG, so it's testable and scalable, which increase reliability.
+- Implementing CI/CD to check the SQL and job relationship, and other necessary checks to ensure that the deployed jobs won't have any typos.
+- Implemented data quality checks on all the tables to reduce data issues.
 
-  > Implementing CI/CD to check the SQL and job relationship, and other necessary checks to ensure that the deployed jobs won't have any typos.
+> Skills: Airflow, SQL, Spark, Hive, Trino, Open Metadata, REST API, AWS, Docker, Kubernetes
 
-  > Implemented data quality checks on all the tables to reduce data issues.
+### Build GraphQL Service Endpoint to support Product
 
-  > Skills: Airflow, SQL, Spark, Hive, Trino, Open Metadata, REST API, AWS, Docker, Kubernetes
+Company: Traveloka
 
-- **Traveloka - Build GraphQL Service Endpoint to support Product**
+- Build an endpoint service to generate customer profiling, the endpoint can be queried through GraphQL.
+- The backend is using FastAPI and deployed through Kubernetes, Docker and GCP.
+- Helping whole Financial Services BE team to simplify their process, they will only get the result, all the computations are happening within data platform service.
 
-  > Build an endpoint service to generate customer profiling, the endpoint can be queried through GraphQL.
+> Skills: GraphQL, FastAPI, Kubernetes, Docker, Python, GCP
 
-  > The backend is using FastAPI and deployed through Kubernetes, Docker and GCP.
-  > Helping whole Financial Services BE team to simplify their process, they will only get the result, all the computations are happening within data platform service.
+### Data Modeling in Financial Services
 
-  > Skills: GraphQL, FastAPI, Kubernetes, Docker, Python, GCP
+Company: Traveloka
 
-- **Traveloka - Data Modeling in Financial Services**
+- This project will involve dimensional modeling, we decide it's hybrid between Star and Snowflake schema.
+- Besides data modeling, project members will need to apply data engineering knowledge, understand the infrastructure behind the data warehouse and data pipelines.
 
-  > This project will involve dimensional modeling, we decide it's hybrid between Star and Snowflake schema.
+> Skills: DBT, dimensional modeling, GCP
 
-  > Besides data modeling, project members will need to apply data engineering knowledge, understand the infrastructure behind the data warehouse and data pipelines.
+### Data Modeling and Orchestration for Customer Experience (CX) team
 
-  > Skills: DBT, dimensional modeling, GCP
+Company: Traveloka
 
-- **Traveloka - External Data Ingestion to Data Warehouse**
+- Build and migrate CX SQL models from native BQ into native DBT SQL, and build the DBT pipeline from scratch.
 
-  > Ingesting data from third party apps, such as Facebook, App Annie, Braze, Allocadia, etc into the BigQuery data warehouse.
+> Skills: DBT, dimensional modeling, GCP, Airflow
 
-  > Resulting create framework, boiler plate to do another ingestion quicker, testable and reliable
+### External Data Ingestion to Data Warehouse
 
-  > Skills: ETL, Airflow, Docker, Kubernetes GCP, Python, Shell
+Company: Traveloka
 
-- **Tokopedia - Build OKR Company Dashboard**
+- Ingesting data from third party apps, such as Facebook, App Annie, Braze, Allocadia, etc into the BigQuery data warehouse.
+- Resulting create framework, boiler plate to do another ingestion quicker, testable and reliable
 
-  > Build dashboard to monitor the ongoing achievements from multiple Business Units are still on track with company target
+> Skills: ETL, Airflow, Docker, Kubernetes GCP, Python, Shell
 
-  > Skills: Tableau, Airflow, GCP
+### Build OKR Company Dashboard
 
-- [Educative - Deploying a Web Application over Kubernetes](https://www.educative.io/verify-certificate/y8E3zVt2ZL7Bq0VxgSyzvm0y2QQgcm)
-- [Educative - Setting up a Streaming Data Pipeline with Kafka](https://www.educative.io/verify-certificate/g5g3ywCwE9xpA617JFKAkp1KL22xSk)
+Company: Tokopedia
+
+- Build dashboard to monitor the ongoing achievements from multiple Business Units are still on track with company target
+
+> Skills: Tableau, Airflow, GCP
 
 ## Certifications
 
 - [Educative - Docker for Developers](https://www.educative.io/verify-certificate/r0w3pLtnWZ5LgVKopIQ5mqOQp446U6)
+- [Educative - Deploying a Web Application over Kubernetes](https://www.educative.io/verify-certificate/y8E3zVt2ZL7Bq0VxgSyzvm0y2QQgcm)
+- [Educative - Setting up a Streaming Data Pipeline with Kafka](https://www.educative.io/verify-certificate/g5g3ywCwE9xpA617JFKAkp1KL22xSk)
 - [Educative - Learn Object-Oriented Programming in Python](https://www.educative.io/verify-certificate/j2l3BzfZn5G0MVK7rFxzJkBxy552FA)
 - [Educative - Mastering Unit Testing with Pytest](https://www.educative.io/verify-certificate/wnDQEXnKW6AFPwvpj9R0RjcQLAwmQ2994UG)
 - [Linkedin Learning - Analyzing Big Data with Hive](https://www.linkedin.com/learning/certificates/2f65729dd55b0e2e9dce9232c9e9327a2f53f50a60464d081296372b735d214d?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_certifications_details%3BydX6llRCQJeNV2NHM0hVAA%3D%3D)
