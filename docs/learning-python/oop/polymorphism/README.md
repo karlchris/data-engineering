@@ -89,4 +89,4 @@ print("Area of circle is:", str(shapes[1].getArea()))
 
 ## Challenges
 
-- Follow on [Task: Implement Animal Class](task.py){:target="\_blank"} for the problem statement and [Solution](solution.py){:target="\_blank"} for the solution
+- Follow on [Task: Implement Animal Class](https://github.com/karlchris/data-engineering/blob/master/docs/learning-python/oop/polymorphism/task.py) for the problem statement and [Solution](https://github.com/karlchris/data-engineering/blob/master/docs/learning-python/oop/polymorphism/solution.py) for the solution
