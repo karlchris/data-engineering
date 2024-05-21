@@ -99,6 +99,13 @@ markdown_extensions:
 
 nav:
   - WELCOME: 'index.md'
+  - Data Engineering:
+    - What is it?: 'data-engineering/README.md'
+    - Ingestion: 'data-engineering/ingestion/README.md'
+    - Transformation: 'data-engineering/transformation/README.md'
+    - Visualization: 'data-engineering/visualization/README.md'
+    - Storage: 'data-engineering/storage/README.md'
+    - DataOps/Security/Infrastructure: 'data-engineering/dataops/README.md'
   - Data Modeling:
     - What is it?: 'data-modeling/README.md'
     - Dimensional Modeling: 
