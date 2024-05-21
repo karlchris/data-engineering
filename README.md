@@ -1,6 +1,6 @@
-# Learn Data Engineering
+# about Data Engineering
 
-Karl Christian's Public Repository for learning Data Engineering
+Karl Christian's Public Repository about Data Engineering.
 
 To test this locally, run
 
@@ -16,4 +16,4 @@ Then, run
 make dev
 ```
 
-it will run the docker image and expose the port to `http://0.0.0.0:8000/learn-data-engineering/`.
+it will run the docker image and expose the port to `http://0.0.0.0:8000/data-engineering/`.

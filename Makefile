@@ -1,7 +1,7 @@
 MKDM_VERSION=9.5.24
 PWD=`pwd`
 PORT=8000
-IMG=learn-de-kchrs
+IMG=de-kchrs
 
 
 # Build docker image for local development
