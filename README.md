@@ -1,8 +1,8 @@
-# about Data Engineering
+# Data Engineering Playbook
 
 Karl Christian's Public Repository about Data Engineering.
 
-To test this locally, run
+To run and test this locally (please make sure you have Docker), run
 
 ```bash
 make build-docker
@@ -16,4 +16,4 @@ Then, run
 make dev
 ```
 
-it will run the docker image and expose the port to `http://0.0.0.0:8000/data-engineering/`.
+it will run the docker image and expose the port to `http://localhost:8000/data-engineering/`.
