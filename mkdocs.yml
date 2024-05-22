@@ -100,14 +100,14 @@ markdown_extensions:
 nav:
   - WELCOME: 'index.md'
   - Data Engineering:
-    - What is it?: 'data-engineering/README.md'
+    - What is Data Engineering?: 'data-engineering/README.md'
     - Ingestion: 'data-engineering/ingestion/README.md'
     - Transformation: 'data-engineering/transformation/README.md'
     - Visualization: 'data-engineering/visualization/README.md'
     - Storage: 'data-engineering/storage/README.md'
     - DataOps/Security/Infrastructure: 'data-engineering/dataops/README.md'
   - Data Modeling:
-    - What is it?: 'data-modeling/README.md'
+    - What is Data Modeling?: 'data-modeling/README.md'
     - Dimensional Modeling: 
       - What is it?: 'data-modeling/dimensional-modeling/README.md'
       - Challenge: 'data-modeling/dimensional-modeling/challenge.md'
@@ -120,7 +120,7 @@ nav:
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
     - Object Oriented Programming:
-      - What is it?: 'learning-python/oop/README.md'
+      - What is OOP?: 'learning-python/oop/README.md'
       - Class: 'learning-python/oop/class/README.md'
       - Encapsulation: 'learning-python/oop/encapsulation/README.md'
       - Inheritance: 'learning-python/oop/inheritance/README.md'
@@ -128,7 +128,7 @@ nav:
       - Object Relationship: 'learning-python/oop/object-relationship/README.md'
     - Functional Programming: 'learning-python/functional-programming/README.md'
     - Unit Testing:
-      - What is it?: 'learning-python/unit-testing/README.md'
+      - What is Unit Testing?: 'learning-python/unit-testing/README.md'
       - Assertion: 'learning-python/unit-testing/assertion/README.md'
       - Exceptions: 'learning-python/unit-testing/exceptions/README.md'
       - Fixtures: 'learning-python/unit-testing/fixtures/README.md'
@@ -136,7 +136,7 @@ nav:
       - Parametrizing: 'learning-python/unit-testing/parametrizing/README.md'
       - Mocking: 'learning-python/unit-testing/mocking/README.md'
     - Scaling Python:
-      - What is it?: 'learning-python/scaling-python/README.md'
+      - What is Scaling with Python?: 'learning-python/scaling-python/README.md'
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
