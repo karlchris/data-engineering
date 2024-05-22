@@ -70,8 +70,9 @@ Company: Careem
 - Created the design pattern on how to implement jobs in DAG, so it's testable and scalable, which increase reliability.
 - Implementing CI/CD to check the SQL and job relationship, and other necessary checks to ensure that the deployed jobs won't have any typos.
 - Implemented data quality checks on all the tables to reduce data issues.
+- Integrated pipeline with Azure, sending the generated files to Azure Blob Storage.
 
-> Skills: Airflow, SQL, Spark, Hive, Trino, Open Metadata, REST API, AWS, Docker, Kubernetes
+> Skills: Airflow, SQL, Spark, Hive, Trino, Open Metadata, REST API, AWS, Azure, Docker, Kubernetes
 
 ### Build GraphQL Service Endpoint to support Product
 
