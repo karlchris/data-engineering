@@ -115,6 +115,7 @@ nav:
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
   - Data Architecture: 'data-architecture/README.md'
   - Data Orchestration: 'data-orchestration/README.md'
+  - Data Ingestion: 'data-ingestion/README.md'
   - Data Processing: 'data-processing/README.md'
   - Data Quality: 'data-quality/README.md'
   - Learning Python:
