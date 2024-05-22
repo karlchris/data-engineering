@@ -13,12 +13,12 @@ It can also improve code reuse and reduce the overall development time and costs
 
 As in this example, we will be using one of the famous Python library `pytest`
 
-- [assertion](assertion)
-- [exceptions](exceptions)
-- [fixtures](fixtures)
-- [decorator](decorator)
-- [parametrizing](parametrizing)
-- [mocking](mocking)
+- [assertion](assertion/README.md)
+- [exceptions](exceptions/README.md)
+- [fixtures](fixtures/README.md)
+- [decorator](decorator/README.md)
+- [parametrizing](parametrizing/README.md)
+- [mocking](mocking/README.md)
 
 ## Pytest configuration
 

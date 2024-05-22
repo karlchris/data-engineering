@@ -159,8 +159,8 @@ It provides a database-specific representation of the logical data model, allowi
 
 Some deeper topics of data modeling, such as:
 
-- [Dimensional Modeling](dimensional-modeling/)
-- [DDL vs DML](ddl-vs-dml/)
-- [Query Life Cycle](query-lifecycle/)
+- [Dimensional Modeling](dimensional-modeling/README.md)
+- [DDL vs DML](ddl-vs-dml/README.md)
+- [Query Life Cycle](query-lifecycle/README.md)
 
 Reference: [Data Modeling by Educative](https://www.educative.io/courses/data-engineering-foundations/introduction-to-data-modeling)

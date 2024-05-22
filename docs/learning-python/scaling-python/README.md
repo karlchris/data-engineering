@@ -94,8 +94,8 @@ Splitting an application should always be a well-thought out decision.
 
 ## Several Effort to scaling Python in its code
 
-- [CPU Scaling](cpu-scaling)
-- [Asynchronous Events](async-solution)
-- [Queue-Based Distribution](queue-distribution)
+- [CPU Scaling](cpu-scaling/README.md)
+- [Asynchronous Events](async-solution/README.md)
+- [Queue-Based Distribution](queue-distribution/README.md)
 
 Reference: [The Hacker's Guide to Scaling Python by Educative](https://www.educative.io/courses/hackers-guide-scaling-python)

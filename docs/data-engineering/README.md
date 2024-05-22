@@ -7,11 +7,11 @@ Given the continuous emergence of new technologies, keeping pace with every tool
 
 The data engineering life cycle involves a series of processes, which can be categorized into five groups:
 
-- [Ingestion](ingestion/)
-- [Transformation](transformation/)
-- [Visualization](visualization/)
-- [Storage](storage/)
-- [DataOps/security/infrastructure](dataops/)
+- [Ingestion](ingestion/README.md)
+- [Transformation](transformation/README.md)
+- [Visualization](visualization/README.md)
+- [Storage](storage/README.md)
+- [DataOps/security/infrastructure](dataops/README.md)
 
 ![data engineering life cycle](pics/data-engineering-life-cycle.png)
 

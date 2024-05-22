@@ -21,10 +21,10 @@ request handling, or any of the other myriad features needed for a practical app
 
 There are couple of items to completely understand Object Oriented Programming concept in Python:
 
-- [Class](class/)
-- [Encapsulation](encapsulation/)
-- [Inheritance](inherintance/)
-- [Polymorphism](polymorphism/)
-- [Object Relationship](object-relationship/)
+- [Class](class/README.md)
+- [Encapsulation](encapsulation/README.md)
+- [Inheritance](inheritance/README.md)
+- [Polymorphism](polymorphism/README.md)
+- [Object Relationship](object-relationship/README.md)
 
 Reference: [Educative: Learn Object Oriented Programming in Python](https://www.educative.io/courses/learn-object-oriented-programming-in-python)
