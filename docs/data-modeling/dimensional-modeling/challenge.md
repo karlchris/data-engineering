@@ -18,14 +18,18 @@ In this example, we have several business processes in mind:
 For a scooter company, the first activity brings the most business value as it's the primary source of revenue.
 So, we will model this activity in the next steps.
 
-> Picking the right business process serves as the foundation for the entire data warehouse.
+!!! warning
+
+    Picking the right business process serves as the foundation for the entire data warehouse.
 
 ## Step 2: Declare the grain
 
 The grain declares the level of detail in each row.
 We start with atomic grain, referring to the lowest level at which data is captured in every business process.
 
-> In this example, every row represents one complete ride with one rider, riding from start to end.
+!!! example
+
+    every row represents one complete ride with one rider, riding from start to end.
 
 Sometimes, rolled-up summary grain is more appropriate due to its query performance.
 But such high-grain tables must be able to answer most of the business questions, otherwise, they will lead to more issues than benefits.
@@ -63,7 +67,9 @@ Here are a few example facts for the `Ride` fact table:
 - Number of pauses during the ride
 - Rating of the ride
 
-> While it's possible to create an extensive list of facts, it's important to collaborate with the business to only include those metrics that hold value for the company.
-> Otherwise, managing "dead" metrics can become a burden during future maintenance.
+!!! warning
+
+    While it's possible to create an extensive list of facts, it's important to collaborate with the business to only include those metrics that hold value for the company.
+    Otherwise, managing "dead" metrics can become a burden during future maintenance.
 
 ![final dimensional model](../pics/final-dimensional-model.png)

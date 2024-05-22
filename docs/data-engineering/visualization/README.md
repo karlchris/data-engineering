@@ -2,7 +2,9 @@
 
 Once the data has been transformed into the desired format, the next step is creating visual representations that are more easily understood by stakeholders.
 
-> Typically, data analysts are responsible for this.
+!!! note
+
+    Typically, data analysts are responsible for this.
 
 As data engineers, we are often involved in setting up the visualization platforms and ensuring the freshness and availability of the dashboards and reports.
 

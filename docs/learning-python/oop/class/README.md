@@ -17,7 +17,9 @@ As the name suggests, the initializer is used to initialize an object of a class
 
 The initialization method is similar to other methods but has a pre-defined name, `__init__`.
 
-> The double underscores mean this is a special method that the Python interpreter will treat as a special case.
+!!! info
+
+    The double underscores mean this is a special method that the Python interpreter will treat as a special case.
 
 The initializer is a special method because it does not have a return type. The first parameter of `__init__` is `self`, which is a way to refer to the object being initialized.
 
@@ -47,7 +49,9 @@ print("Department :", Steve.department)
 
 The initializer is automatically called when an object of the class is created. Now that we will be using initializers to make objects, a good practice would be to initialize all of the object properties when defining the initializer.
 
-> It is important to define the initializer with complete parameters to avoid any errors. Similar to methods, initializers also have the provision for optional parameters.
+!!! warning
+
+    It is important to define the initializer with complete parameters to avoid any errors. Similar to methods, initializers also have the provision for optional parameters.
 
 ## Challenges
 

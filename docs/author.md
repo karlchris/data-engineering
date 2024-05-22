@@ -4,7 +4,7 @@
 
 _Halo_, I am [Karl Christian](https://www.linkedin.com/in/karllchris/) :wave:
 
-Expert in **data engineering**, **problem solving** and building a **platform**. :computer:
+Expert in **data engineering**, **data warehouse**, **problem solving** and building a **platform**. :computer:
 
 On a mission to democratize access to data, provide analytics as a platform, and building data driven framework as a mindset.
 

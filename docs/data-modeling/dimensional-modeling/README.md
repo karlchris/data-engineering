@@ -8,7 +8,9 @@ Data is generated and continually updated in real-time as the business proceeds.
 
 **Operational databases**, also known as Online transaction processing databases (OLTP), are optimized for processing transactions and providing the best application performance to users.
 
-> Additionally, operational database extensively use normalized structure because an update or insert transaction only affects one table in a database.
+!!! info
+
+    Additionally, operational database extensively use normalized structure because an update or insert transaction only affects one table in a database.
 
 ### Drawbacks
 
@@ -22,7 +24,9 @@ known as online analytical processing (OLAP) database, are optimized for handlin
 
 In contrast to OLTP, which only preserve the latest object state, OLAP databases maintain the historical data to support various analysis spanning an extended timeframe.
 
-> Moreover, external-facing tables are typically denormalized in OLAP databases because we want to provide an efficient and simplified way for users to retrieve data.
+!!! info
+
+    Moreover, external-facing tables are typically denormalized in OLAP databases because we want to provide an efficient and simplified way for users to retrieve data.
 
 ## Kimball's Dimensional Modeling
 
@@ -49,7 +53,9 @@ These dimension attributes determine the ways users can segment the data, and th
 
 ![Dimension table](../pics/dimension-table.png)
 
-> Dimension tables tend to have fewer rows than fact tables, but can be wide with text columns. As the business evolves, dimension tables can grow horizontally.
+!!! info
+
+    Dimension tables tend to have fewer rows than fact tables, but can be wide with text columns. As the business evolves, dimension tables can grow horizontally.
 
 ## Snowflake schema
 
@@ -62,7 +68,9 @@ In a snowflake schema, engineers break down individual dimension tables into log
 
 ![Snowflake schema](../pics/snowflake-schema.png)
 
-> the main difference is that snowflake schemas are more normalized than star schemas
+!!! note
+
+    the main difference is that snowflake schemas are more normalized than star schemas
 
 ### Benefits
 
@@ -131,8 +139,12 @@ Every time a sale occurs, the demographics ID in the fact table represents the c
 In the second variation, we maintain a mini SCD type 2 table for the same attributes and link it to the fact table using customer id.
 All the attributes in the table must be rapidly changing.
 
-> Either way, the goal is to ensure the query performance by separating slowly changing or static attributes from rapidly changing attributes.
-> When users retrieve static attributes, the performance won't be impacted by the rapidly changing attributes.
+!!! note
 
-> For further ilustration on how to build dimensional modeling, please go to [Challenge](challenge.md).
-> I will explain clearly step by step.
+    Either way, the goal is to ensure the query performance by separating slowly changing or static attributes from rapidly changing attributes.
+    When users retrieve static attributes, the performance won't be impacted by the rapidly changing attributes.
+
+!!! example
+
+    For further ilustration on how to build dimensional modeling, please go to [Challenge](challenge.md).
+    I will explain clearly step by step.

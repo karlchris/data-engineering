@@ -113,6 +113,10 @@ nav:
       - Challenge: 'data-modeling/dimensional-modeling/challenge.md'
     - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
+  - Data Architecture: 'data-architecture/README.md'
+  - Data Orchestration: 'data-orchestration/README.md'
+  - Data Processing: 'data-processing/README.md'
+  - Data Quality: 'data-quality/README.md'
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
     - Object Oriented Programming:

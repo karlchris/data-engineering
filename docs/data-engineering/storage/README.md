@@ -4,7 +4,9 @@ In many ways, how data is stored determines how it is used.
 For example, data in a data warehouse is typically used by batch processes and analytics, while frameworks like Apache Kafka facilitate real-time use cases.
 They offer not only storage capabilities but also function as an ingestion and query system.
 
-> Generally speaking, there are 4 standard storage systems.
+!!! info
+
+    Generally speaking, there are 4 standard storage systems.
 
 ## Data Warehouse
 

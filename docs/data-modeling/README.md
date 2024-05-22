@@ -7,7 +7,9 @@ This is where data modeling comes in. It helps us translate business requirement
 Data can be modeled at various levels of abstraction.
 The process starts by collecting requirements from business users.
 
-> These **requirements** are then translated into a database design consisting of **entities** and **attributes**.
+!!! info
+
+    These **requirements** are then translated into a database design consisting of **entities** and **attributes**.
 
 ![Data Modeling process](pics/data-modeling-process.png)
 
@@ -25,7 +27,9 @@ The business aims to design a database system to keep track of sales and use the
 
 The data modeling process starts with high-level abstraction, namely a conceptual model.
 
-> A conceptual data model provides a big picture of the system's contents and business rules, without going into the details of the database.
+!!! info
+
+    A conceptual data model provides a big picture of the system's contents and business rules, without going into the details of the database.
 
 It focuses on defining entities and the relationships between them.
 A typical way to visualize a conceptual model is through `Entity-Relationship (ER) diagrams`.
@@ -35,7 +39,9 @@ A typical way to visualize a conceptual model is through `Entity-Relationship (E
 To begin the design process, the first step is to determine which business process to model.
 A business process refers to a low-level activity carried out by the organization, such as taking orders, receiving payments, or processing customer requests.
 
-> In this case, the business process is sales transactions.
+!!! tip
+
+    In this case, the business process is sales transactions.
 
 ### Determine key entities
 
@@ -61,14 +67,18 @@ A conceptual data model is independent of any specific technology.
 It is a great tool for creating a shared understanding of data and business requirements.
 It helps stakeholders identify potential data issues and ensures that data is organized in a consistent way that supports the business.
 
-> A **conceptual** data model serves as a foundation for creating **logical** and **physical** data models.
+!!! info
+
+    A **conceptual** data model serves as a foundation for creating **logical** and **physical** data models.
 
 ## Logical data models
 
 A **logical data model** is a representation of a possible implementation of the conceptual model without being tied to any specific technology.
 This stage is crucial because although the conceptual model is easier to communicate, its lack of context can make implementation challenging.
 
-> The logical model expects more details, such as entity attributes, granularity, primary keys, foreign keys, normalization, and column descriptions.
+!!! note
+
+    The logical model expects more details, such as entity attributes, granularity, primary keys, foreign keys, normalization, and column descriptions.
 
 ### Entity attributes
 
@@ -94,7 +104,9 @@ Normally, a primary key comes with a few constraints:
 
 In above example, the `Person` table uses `Passport id` as the primary key and `City id` as the foreign key, which is the primary key of `City` table.
 
-> If rows cannot be uniquely identified with one primary key, it is possible to create a composite primary key. This key is composed of two or more columns and ensures the uniqueness of each row.
+!!! tip
+
+    If rows cannot be uniquely identified with one primary key, it is possible to create a composite primary key. This key is composed of two or more columns and ensures the uniqueness of each row.
 
 ### Granularity
 
@@ -109,11 +121,15 @@ For the `Sales` table, we have several options for its granularity, ranked from 
 
 For this use case, the 2nd option is more approriate. The 3rd option aggregates all product sales in each transaction, but this would require remodeling the data when business users request sales data per product.
 
-> Generally, we should aim to model our data at the lowest possible level of granularity. From there, it's easy to aggregate data to any higher grain.
+!!! tip
+
+    Generally, we should aim to model our data at the lowest possible level of granularity. From there, it's easy to aggregate data to any higher grain.
 
 Although the 1st option has the lowest grain, it may result in excessive duplicates.
 
-> For example, a purchase of ten apples of the same kind will create 10 rows with identical information.
+!!! example
+
+    a purchase of ten apples of the same kind will create 10 rows with identical information.
 
 Defining granularity is not an easy task because the model must be flexible enough to answer various analytics questions without providing redundant information.
 
@@ -138,7 +154,9 @@ From the use case, we can find multiple ID in the `Sales` table, such as:
 
 The idea of **normalization** is splitting the big table into smaller table, to remove duplicated information and easier, faster to retrieve the data based on analytics use cases.
 
-> There's a risk if we split the table into smaller one, then we would need JOIN method to achieve the goals, and JOIN can cause excessive data reading and need more resources.
+!!! note
+
+    There's a risk if we split the table into smaller one, then we would need JOIN method to achieve the goals, and JOIN can cause excessive data reading and need more resources.
 
 The **wise** decision to consider pros and cons between Normalization approach but keeping the data in a good state (faster and easy to retrieve), this is the essence of data modeling.
 

@@ -8,7 +8,9 @@ While we trust the database engine to do all the magic and return us the expecte
 There are two programming paradigms: imperative and declarative.
 The most commonly used programming languages, like Python and Java, are imperative.
 
-> They instruct the computer on how the code should run by giving a sequence of steps.
+!!! info
+
+    They instruct the computer on how the code should run by giving a sequence of steps.
 
 On the other hand, when using a declarative programming language like SQL, we instruct the computer what kind of result we expect, such as the conditions and transformation tasks that need to be performed, and the language figures out how to execute the operations to achieve that result.
 
@@ -37,7 +39,9 @@ A query execution plan is a set of steps employed by a database to retrieve data
 The plan outlines the sequence of operations that the database will follow to retrieve, manipulate, and present the requested data.
 The plan includes decisions on how to access tables, how to join multiple tables, and any optimizations to enhance performance.
 
-> When receiving AST from the query parsers, the query optimizer comes up with multiple strategies and selects the one that offers the best performance in terms of time and resources, and it is the final query execution plan.
+!!! note
+
+    When receiving AST from the query parsers, the query optimizer comes up with multiple strategies and selects the one that offers the best performance in terms of time and resources, and it is the final query execution plan.
 
 ![Query execution plan](../pics/query-execution-plan.png)
 
@@ -51,7 +55,9 @@ Steps:
    BigQUery uses columnar storage, meaning that each column's data resides within one or multiple files in the distributed file system.
    When running the query, only the columns needed for the query will be selected, which minimizes I/O operations.
 
-> Besides, columnar storage allows for better compression, resulting in reduced storage space and improved data retrieval speed.
+!!! info
+
+    Besides, columnar storage allows for better compression, resulting in reduced storage space and improved data retrieval speed.
 
 2. A slot is a virtual CPU used by BigQuery to execute queries.
    In this example, each slot reads one input file, applying filters on `start_station_name` and subsequently, append the count of the valid records in this file to the shuffle
@@ -67,4 +73,7 @@ BigQuery has tons of internal optimization strategies to optimize query cost and
 This can include using cached results and rewriting queries to use different algorithms. However, it doesn't optimize everything.
 A query execution plan can help us understand which stage uses the most resources so that we can optimize it ourselves.
 
-> For example, in a JOIN statement, it's wiser to do the filter before the join, instead of after the join. If there are a lot of CPU-intensive tasks, it's recommended to use BigQuery approximate aggregate functions, APPROX_COUNT_DISTINCT which are often within 1% of the exact function.
+!!! example
+
+    in a JOIN statement, it's wiser to do the filter before the join, instead of after the join.
+    If there are a lot of CPU-intensive tasks, it's recommended to use BigQuery approximate aggregate functions, `APPROX_COUNT_DISTINCT` which are often within 1% of the exact function.
