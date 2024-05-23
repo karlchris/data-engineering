@@ -54,6 +54,10 @@ In real time, messages are pushed from one side to the other until one party clo
 
     This simplified example demonstrates how the server and client interact.
 
+!!! danger
+
+    This example is compatible to run only on `Linux`
+
 1. Download the `websocat` package with the following commands.
 
 ```bash
@@ -95,7 +99,7 @@ The following pseudocode implements a client using Twelve Data python client.
 It opens a socket connection to Twelve Data, consumes data, and ingests into a database through callback function `on_event`.
 Inside `on_event` function, we can batch records before inserting them into database.
 
-```python
+```python title="client.py"
 from twelvedata import TDClient
 
 def on_event(event):
@@ -203,7 +207,7 @@ Kafka consumer using the `confluent_kafka` python library.
 The consumer is a long-running application that continuously polls kafka for more data.
 `timeout` is a timeout interval that controls how long the `poll()` will block if data is unavailable. If it's set to zero, `poll()` will immediately return.
 
-```python
+```python title="consumers.py"
 from confluent_kafka import Consumer, TopicPartition
 
 consumer = Consumer(
