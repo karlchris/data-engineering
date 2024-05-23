@@ -84,8 +84,6 @@ it will create a client listening to port `1234`
 
 4. Now the connection has been established between server and client, you can type anything on either side and should receive them on other other side.
 
-![websocket interaction](../pics/websocket-interaction.png)
-
 !!! info
 
     WebSocket is a simple but powerful technology.

@@ -28,7 +28,7 @@ Streaming platforms like Apache Kafka and Google Pub/Sub support three message d
 
 Their main difference is the way to handle **failures** caused by communication errors or other disruptions, which has an impact on the level of data integrity, performance, implementation and cost.
 
-![message delivery semantics](../pics/message-delivery-semantics.png)
+![message delivery semantic](../pics/message-delivery-semantic.png)
 
 ### at-most-once
 
