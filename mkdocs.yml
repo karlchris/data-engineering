@@ -115,7 +115,17 @@ nav:
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
   - Data Architecture: 'data-architecture/README.md'
   - Data Orchestration: 'data-orchestration/README.md'
-  - Data Ingestion: 'data-ingestion/README.md'
+  - Data Ingestion: 
+    - What is data ingestion?: 'data-ingestion/README.md'
+    - Batch Ingestion: 'data-ingestion/batch/README.md'
+    - Streaming Ingestion: 'data-ingestion/streaming/README.md'
+    - Push vs. Pull: 'data-ingestion/push-pull/README.md'
+    - Methods:
+      - Secure File Transfer Protocol (SFTP): 'data-ingestion/methods/sftp.md'
+      - Application Programming Interface (API): 'data-ingestion/methods/api.md'
+      - Object Storage: 'data-ingestion/methods/object-storage.md'
+      - Change Data Capture (CDC): 'data-ingestion/methods/cdc.md'
+      - Streaming Platform: 'data-ingestion/methods/streaming-platform.md'
   - Data Processing: 'data-processing/README.md'
   - Data Quality: 'data-quality/README.md'
   - Learning Python:
