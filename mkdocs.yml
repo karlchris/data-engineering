@@ -96,9 +96,10 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 
-
+# Pages Navigations
 nav:
   - WELCOME: 'index.md'
+
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
     - Ingestion: 'data-engineering/ingestion/README.md'
@@ -106,6 +107,7 @@ nav:
     - Visualization: 'data-engineering/visualization/README.md'
     - Storage: 'data-engineering/storage/README.md'
     - DataOps/Security/Infrastructure: 'data-engineering/dataops/README.md'
+
   - Data Modeling:
     - What is Data Modeling?: 'data-modeling/README.md'
     - Dimensional Modeling: 
@@ -113,8 +115,11 @@ nav:
       - Challenge: 'data-modeling/dimensional-modeling/challenge.md'
     - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
+
   - Data Architecture: 'data-architecture/README.md'
+
   - Data Orchestration: 'data-orchestration/README.md'
+
   - Data Ingestion: 
     - What is data ingestion?: 'data-ingestion/README.md'
     - Batch Ingestion: 'data-ingestion/batch/README.md'
@@ -126,8 +131,11 @@ nav:
       - Object Storage: 'data-ingestion/methods/object-storage.md'
       - Change Data Capture (CDC): 'data-ingestion/methods/cdc.md'
       - Streaming Platform: 'data-ingestion/methods/streaming-platform.md'
+
   - Data Processing: 'data-processing/README.md'
+
   - Data Quality: 'data-quality/README.md'
+
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
     - Object Oriented Programming:
@@ -151,4 +159,5 @@ nav:
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
+
   - About me: 'author.md'
