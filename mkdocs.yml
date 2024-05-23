@@ -116,10 +116,6 @@ nav:
     - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
 
-  - Data Architecture: 'data-architecture/README.md'
-
-  - Data Orchestration: 'data-orchestration/README.md'
-
   - Data Ingestion: 
     - What is data ingestion?: 'data-ingestion/README.md'
     - Batch Ingestion: 'data-ingestion/batch/README.md'
@@ -131,6 +127,10 @@ nav:
       - Object Storage: 'data-ingestion/methods/object-storage.md'
       - Change Data Capture (CDC): 'data-ingestion/methods/cdc.md'
       - Streaming Platform: 'data-ingestion/methods/streaming-platform.md'
+
+  - Data Architecture: 'data-architecture/README.md'
+
+  - Data Orchestration: 'data-orchestration/README.md'
 
   - Data Processing: 'data-processing/README.md'
 
