@@ -107,10 +107,10 @@ if __name__ == '__main__':
     websocket_source()
 ```
 
-- Open a new tab, terminal tab 3, and execute the following command
+- Open a new tab, terminal tab 3, and execute the following command to run python code above.
 
 ```bash
-python /usercode/producer.py
+python producer.py
 ```
 
 - Read messages from the topic
