@@ -22,7 +22,7 @@ There are many ways to ingest files into GCP cloud storage, and we will use the 
 !!! warning
 
     You need to have Google Cloud Platform account to run below code.
-    You can create [here](https://cloud.google.com/free/?utm_source=google&utm_medium=cpc&utm_campaign=emea-none-all-none-dr-sitelink-all-all-trial-e-gcp-1011340&utm_content=text-ad-none-any-DEV_c-CRE_500236788633-ADGP_Hybrid+%7C+BKWS+-+EXA+%7C+Txt+-+GCP+-+General+-+v3-KWID_43700060389294294-aud-606988878854:kwd-26415313501-userloc_1000013&utm_term=KW_google%20cloud%20platform-ST_google+cloud+platform-NET_g-&gad_source=1&gclid=CjwKCAjw9cCyBhBzEiwAJTUWNeR69VpTp2BDvmta6DiU61lqCoaob3T9RqRJqTn6fpm2bJrWWo5XgRoCf84QAvD_BwE&gclsrc=aw.ds)
+    You can create [here](https://cloud.google.com/?hl=en)
 
 1. Download the CSV files from a dataset called `on-time performance data`, which is about the air carrier's quality of service.
 
