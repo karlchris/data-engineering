@@ -16,7 +16,7 @@ Then, we will take a look into 2 popular data storage architecture:
 
 ## Patterns of Good Cloud Data Architecture
 
-Let's learn about 5 princinples for cloud-native data architecture that are useful for designing and operating reliable, cost-effective and efficient systems in the cloud.
+Let's learn about 5 principles for cloud-native data architecture that are useful for designing and operating reliable, cost-effective and efficient systems in the cloud.
 
 Cloud offers incredible capabilities, but without deliberate design decisions, the architecture can become fragile, expensive, and challenging to maintain.
 Most cloud environments have not just one application but several technologies that need to be integrated.
