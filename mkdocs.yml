@@ -131,7 +131,10 @@ nav:
       - Change Data Capture (CDC): 'data-ingestion/methods/cdc.md'
       - Streaming Platform: 'data-ingestion/methods/streaming-platform.md'
 
-  - Data Architecture: 'data-architecture/README.md'
+  - Data Architecture: 
+    - What is Data Architecture?: 'data-architecture/README.md'
+    - Framework Architecture: 'data-architecture/framework-architecture/README.md'
+    - Storage Architecture: 'data-architecture/storage-architecture/README.md'
 
   - Data Orchestration: 'data-orchestration/README.md'
 
