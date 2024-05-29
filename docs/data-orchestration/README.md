@@ -146,3 +146,5 @@ DAG is a fundamental concept in data orchestration for a few reasons:
     In general, data orchestration connects the dots and enables data to flow in a consistent and manageable way.
 
     With a solid orchestration platform in place, organizations can quickly and efficiently scale their data volumes and deliver high-quality data to stakeholders for better decision-making.
+
+Reference: [Educative - Data Orchestration](https://www.educative.io/courses/data-engineering-foundations/what-is-data-orchestration)

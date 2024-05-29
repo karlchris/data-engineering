@@ -156,3 +156,5 @@ FROM my_table
 - Working with external data in CSV or JSON in a common scenario.
   With dbt's seed functionality, we can quickly and easily load small CSV or JSON files into the data warehouse using the `dbt seed` command.
   This can be particularly useful for populating small tables with test data, for quickly prototyping a new data model, or storing a config file coming from an external system.
+
+Reference: [dbt Documentation](https://docs.getdbt.com/)
