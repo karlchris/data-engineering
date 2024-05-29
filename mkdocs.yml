@@ -136,7 +136,12 @@ nav:
     - Framework Architecture: 'data-architecture/framework-architecture/README.md'
     - Storage Architecture: 'data-architecture/storage-architecture/README.md'
 
-  - Data Orchestration: 'data-orchestration/README.md'
+  - Data Orchestration: 
+    - What is Data Orchestration?: 'data-orchestration/README.md'
+    - Airflow: 
+      - What is Airflow?: 'data-orchestration/airflow/README.md'
+      - Airflow DAG Design: 'data-orchestration/airflow/airflow-dag-design.md'
+    - Data Build Tool (dbt): 'data-orchestration/dbt/README.md'
 
   - Data Processing: 'data-processing/README.md'
 
