@@ -1,4 +1,4 @@
-# Data Engineering Playbook
+# Data Engineering Handbook
 
 Karl Christian's Public Repository about Data Engineering.
 
