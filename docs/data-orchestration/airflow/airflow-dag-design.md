@@ -198,3 +198,158 @@ random_dag6()
 ```
 
 ## Manage cross-DAG dependencies
+
+In principle, every DAG is an independent workflow.
+However, sometimes, it's necessary to create **dependencies** between DAGs.
+
+!!! example
+
+    a DAG performs an ETL job that produces a table sales. The sales table is the source of two downstream DAGs, where one generates revenue reports, and the other one uses it to train a machine learning model.
+
+There are several ways to implement cross-DAG dependencies in Airflow.
+
+- `TriggerDagOperator` is an operator that triggers a downstream DAG from any point in the DAG. It's similar to a push mechanism where the producer decides when to notify the consumers.
+
+```python
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
+
+@dag(
+    schedule="30 4 * * *",
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag7():
+
+    TriggerDagRunOperator(
+        task_id="trigger_dagrun",
+        trigger_dag_id="random_dag1",
+        conf={},
+    )
+
+random_dag7()
+```
+
+- `ExternalTaskSensor` is a sensor operator for downstream DAGs to pull states of the upstream DAG, similar to a pull mechanism. The downstream DAG will wait until the task is completed in the upstream DAG.
+
+```python
+from airflow.sensors.external_task import ExternalTaskSensor
+
+@dag(
+    schedule="30 4 * * *",
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag8():
+
+    ExternalTaskSensor(
+        task_id="external_sensor",
+        external_dag_id="random_dag3",
+        external_task_id="python_operator",
+        allowed_states=["success"],
+        failed_states=["failed", "skipped"],
+    )
+
+random_dag8()
+```
+
+Another method introduced in `version 2.4` uses datasets to create data-driven dependencies between DAGs.
+
+An Airflow dataset is a logical grouping of data updated by upstream tasks. The upstream task defines the output dataset via `outlets` parameter. The completion of the task means the successful update of the dataset.
+
+In downstream DAGs, instead of using a time-based schedule, the DAG refers to the corresponding dataset produced by the upstreams.
+Therefore, the downstream DAG will be triggered in a data-driven manner rather than a scheduled-based manner.
+
+```python
+dag1_dataset = Dataset("s3://dag1/output_1.txt", extra={"hi": "bye"})
+
+@dag(
+    schedule="30 4 * * *",
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag9_producer():
+    BashOperator(outlets=[dag1_dataset], task_id="producer", bash_command="sleep 5")
+
+random_dag9_producer()
+
+@dag(
+    schedule=[dag1_dataset],
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag9_consumer():
+    BashOperator(task_id="consumer", bash_command="sleep 5")
+
+random_dag9_consumer()
+```
+
+## Best practices
+
+When working with Airflow, there are several best practices to keep in mind that help ensure our pipelines run smoothly and efficiently.
+
+### Idempotency
+
+**Idempotency** is a fundamental concept for data pipelines. In the context of Airflow, idempotency means running the same DAG Run multiple times has the same effect as running it only once.
+When a DAG is designed to be idempotent, it can be executed repeatedly without causing unexpected changes to the pipeline's output.
+
+This is especially necessary when a DAG Run might be rerun due to failures or errors in the processing.
+
+!!! example
+
+    An example to make DAG idempotent is to use templates such as variable `{{ execution_date }}`.
+
+    It's associated with the expected scheduled time of each run, and the date won't be changed even if we rerun the DAG Run a few hours later.
+
+### Avoid top-level code in the DAG file
+
+By default, Airflow reads the dag folder every 30 seconds, including the top-level code that is outside of DAG context.
+
+Because of this, having expensive top-level code, such as making requests to external APIs, can cause performance issues because they are called every 30 seconds rather than only when DAG is scheduled.
+
+The general advice is to limit the amount of top-level code in the DAG file and move it within the DAG context or operators.
+
+This can help reduce unnecessary overheads and allow Airflow to focus on executing the right things.
+
+The following example shows both good and bad ways of making an API request:
+
+```python
+# Bad example - requests will be made every 30 seconds instead of everyday at 4:30am
+res = requests.get("https://api.sampleapis.com/coffee/hot")
+
+@dag(
+    schedule="30 4 * * *",
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag7():
+
+    @task
+    def python_operator() -> None:
+        logging.info(f"API result {res}")
+    python_operator()
+
+random_dag7()
+
+# Good example
+
+@dag(
+    schedule="30 4 * * *",
+    start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["random"]
+)
+def random_dag7():
+
+    @task
+    def python_operator() -> None:
+        res = requests.get("https://api.sampleapis.com/coffee/hot") # move API request within DAG context
+        logging.info(f"API result {res}")
+    python_operator()
+
+random_dag7()
+```
