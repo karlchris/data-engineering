@@ -114,7 +114,7 @@ nav:
   - Data Modeling:
     - What is Data Modeling?: 'data-modeling/README.md'
     - Dimensional Modeling: 
-      - What is it?: 'data-modeling/dimensional-modeling/README.md'
+      - What is Dimensional Modeling?: 'data-modeling/dimensional-modeling/README.md'
       - Challenge: 'data-modeling/dimensional-modeling/challenge.md'
     - DDL vs. DML: 'data-modeling/ddl-vs-dml/README.md'
     - Query Life Cycle: 'data-modeling/query-lifecycle/README.md'
