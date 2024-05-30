@@ -1,10 +1,10 @@
-FROM python:3.9-slim
+FROM fishtownanalytics/dbt:1.0.0
 
-WORKDIR /app
+WORKDIR /dbt
 
-COPY requirements.txt /app/
-RUN pip install -r /app/requirements.txt
+COPY . /dbt/
+COPY profiles /root/.dbt
 
-COPY . /app
+ENV GOOGLE_APPLICATION_CREDENTIALS=/creds/application_default_credentials.json
 
 CMD [ "executable" ]

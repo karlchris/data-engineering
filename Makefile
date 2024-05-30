@@ -2,6 +2,8 @@ MKDM_VERSION=9.5.24
 PWD=`pwd`
 PORT=8000
 IMG=de-kchrs
+USER := `whoami | tr . _`
+GCP_AUTH := ${HOME}/.config/gcloud
 
 
 # Build docker image for local development
@@ -26,4 +28,11 @@ build-dbt:
 
 run-dbt:
 	@echo "Running dbt in container"
-	@docker run -it dbt /bin/bash
+	@docker run \
+		-e DESTINATION=${USER} \
+		-e DBT_ENV=dev \
+		--rm \
+		-v ${GCP_AUTH}:/creds -it \
+		--entrypoint /bin/bash \
+		-p 8082:8080 \
+		dbt
