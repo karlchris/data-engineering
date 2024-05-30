@@ -177,6 +177,7 @@ nav:
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
   
   - Projects:
+    - List of Projects: 'projects/README.md'
     - dbt: 'projects/dbt/README.md'
 
   - About me: 'author.md'
