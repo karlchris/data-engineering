@@ -145,7 +145,12 @@ nav:
 
   - Data Processing: 'data-processing/README.md'
 
-  - Data Quality: 'data-quality/README.md'
+  - Data Quality: 
+    - What is data quality?: 'data-quality/README.md'
+    - dbt test: 'data-quality/dbt-test/README.md'
+    - soda: 'data-quality/soda/README.md'
+    - great expectations: 'data-quality/great-expectations/README.md'
+    - open metadata: 'data-quality/open-metadata/README.md'
 
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
