@@ -12,9 +12,18 @@ build-docker:
 
 # Run dev server in docker
 dev:
-	echo "Starting dev server in a docker container"
+	@echo "Starting dev server in a docker container"
 	@docker run \
 		--rm -it \
 		-p 127.0.0.1:${PORT}:8000 \
 		-v ${PWD}:/docs \
 		${IMG}:dev
+
+build-dbt:
+	@echo "Building dbt image"
+	@docker build -f docs/projects/dbt/Dockerfile docs/projects/dbt \
+	-t dbt
+
+run-dbt:
+	@echo "Running dbt in container"
+	@docker run -it dbt /bin/bash

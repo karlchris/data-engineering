@@ -175,5 +175,8 @@ nav:
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
+  
+  - Projects:
+    - dbt: 'projects/dbt/README.md'
 
   - About me: 'author.md'
