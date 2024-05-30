@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: table_sales
+    columns:
+      - name: quantity
+        tests:
+          - not_null
+      - name: product
+        tests:
+          - accepted_values:
+              values: ['apple', 'pear', 'banana']
+  - name: table_report
+  - name: incremental_report
+  - name: view_apple_sales
+  - name: ephemeral_banana_sales

@@ -1,0 +1,15 @@
+data-eng:
+  target: dev
+
+  outputs:
+
+    dev:
+      type: bigquery
+      method: oauth
+      project: data-engineering-424915
+      dataset: "data_eng"
+      timeout_seconds: 300
+      location: US
+      priority: interactive
+      retries: 0
+      threads: 8

@@ -101,7 +101,7 @@ markdown_extensions:
 
 # Pages Navigations
 nav:
-  - Preface: 'index.md'
+  - Preface: 'preface.md'
 
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
@@ -145,7 +145,12 @@ nav:
 
   - Data Processing: 'data-processing/README.md'
 
-  - Data Quality: 'data-quality/README.md'
+  - Data Quality: 
+    - What is data quality?: 'data-quality/README.md'
+    - dbt test: 'data-quality/dbt-test/README.md'
+    - soda: 'data-quality/soda/README.md'
+    - great expectations: 'data-quality/great-expectations/README.md'
+    - open metadata: 'data-quality/open-metadata/README.md'
 
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
@@ -170,5 +175,9 @@ nav:
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
+  
+  - Projects:
+    - List of Projects: 'projects/README.md'
+    - dbt: 'projects/dbt/README.md'
 
   - About me: 'author.md'
