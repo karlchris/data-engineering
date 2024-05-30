@@ -178,6 +178,6 @@ nav:
   
   - Projects:
     - List of Projects: 'projects/README.md'
-    - dbt: 'projects/dbt/README.md'
+    - Running dbt and Google BigQuery using Docker: 'projects/dbt/README.md'
 
   - About me: 'author.md'
