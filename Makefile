@@ -52,7 +52,7 @@ run-gx:
 	@docker run \
 		--rm \
 		-v ${GCP_AUTH}:/creds -it \
-		-v ${HOME}/repos/data-engineering/projects/great-expectations/:/app \
+		-v ${PWD}/projects/great-expectations/:/app \
 		--entrypoint /bin/bash \
 		-p 8083:8080 \
 		gx
