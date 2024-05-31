@@ -6,6 +6,10 @@ USER := `whoami | tr . _`
 GCP_AUTH := ${HOME}/.config/gcloud
 
 
+clean:
+	@docker stop $(docker ps -q) && \
+	docker system prune -f
+
 # Build docker image for local development
 build-page:
 	@echo "Building page image"

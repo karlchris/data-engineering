@@ -17,3 +17,11 @@ make dev
 ```
 
 it will run the docker image and expose the UI to `http://localhost:8000/data-engineering/`.
+
+## Clean up
+
+run this command
+
+```bash
+make clean
+```
