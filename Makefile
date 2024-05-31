@@ -7,7 +7,8 @@ GCP_AUTH := ${HOME}/.config/gcloud
 
 
 # Build docker image for local development
-build-docker:
+build-page:
+	@echo "Building page image"
 	@docker build . -f Dockerfile \
 		-t ${IMG}:dev \
 		--build-arg MKDM_VERSION=${MKDM_VERSION}
