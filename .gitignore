@@ -1,2 +1,4 @@
 **/.DS_Store
 **/.local*
+**/uncommitted
+**/.ge_store*

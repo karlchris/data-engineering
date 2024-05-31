@@ -148,9 +148,6 @@ nav:
   - Data Quality: 
     - What is data quality?: 'data-quality/README.md'
     - dbt test: 'data-quality/dbt-test/README.md'
-    - soda: 'data-quality/soda/README.md'
-    - great expectations: 'data-quality/great-expectations/README.md'
-    - open metadata: 'data-quality/open-metadata/README.md'
 
   - Learning Python:
     - Why Python?: 'learning-python/README.md'
@@ -178,6 +175,7 @@ nav:
   
   - Projects:
     - List of Projects: 'projects/README.md'
-    - Running dbt and Google BigQuery using Docker: 'projects/dbt/README.md'
+    - Running dbt and BigQuery using Docker: 'projects/dbt.md'
+    - Automated Data Quality with Great Expectations and BigQuery: 'projects/great-expectations.md'
 
   - About me: 'author.md'
