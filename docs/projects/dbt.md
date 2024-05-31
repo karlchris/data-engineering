@@ -1,4 +1,4 @@
-# Running **dbt** and **Google BigQuery** using **Docker**
+# Running dbt and BigQuery using Docker
 
 !!! warning "must have"
 
@@ -15,7 +15,7 @@
 - Enter your [GCP console](https://console.cloud.google.com/) and go to BigQuery.
   You will find view as below, your **[project name]** is within the **red box**.
 
-![bigquery view](../pics/bigquery-view.png)
+![bigquery view](pics/bigquery-view.png)
 
 - In your GCP project, create dataset name `data_eng`.
 
@@ -142,7 +142,7 @@ There are 1 unused configuration paths:
 
 - you can check in the BigQuery UI for the created tables.
 
-![bigquery dbt tables](../pics/bigquery-dbt-tables.png)
+![bigquery dbt tables](pics/bigquery-dbt-tables.png)
 
 ## Check dbt docs and DAG
 
