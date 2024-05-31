@@ -23,7 +23,7 @@ dev:
 
 build-dbt:
 	@echo "Building dbt image"
-	@docker build -f docs/projects/dbt/Dockerfile docs/projects/dbt \
+	@docker build -f projects/dbt/Dockerfile projects/dbt \
 	-t dbt
 
 run-dbt:
