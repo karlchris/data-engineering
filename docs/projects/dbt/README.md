@@ -233,3 +233,54 @@ run-dbt:
 and you can also see each of dbt models informations, such as: details, descriptions, column and code.
 
 ![dbt ui](../pics/dbt-ui.png)
+
+## Testing data quality
+
+- to perform data quality check on dbt, written in [schema.yml](../../../projects/dbt/models/example/schema.yml)
+
+```yaml
+version: 2
+
+models:
+  - name: table_sales
+    columns:
+      - name: quantity
+        tests:
+          - not_null
+      - name: product
+        tests:
+          - accepted_values:
+              values: ["apple", "pear", "banana"]
+```
+
+run this
+
+```bash
+dbt test
+```
+
+Output:
+
+```bash
+root@167804cf135d:/dbt# dbt test
+05:11:38  Running with dbt=1.0.0
+05:11:38  Partial parse save file not found. Starting full parse.
+05:11:39  [WARNING]: Configuration paths exist in your dbt_project.yml file which do not apply to any resources.
+There are 1 unused configuration paths:
+- models.data-eng.example
+
+05:11:39  Found 5 models, 2 tests, 0 snapshots, 0 analyses, 189 macros, 0 operations, 0 seed files, 0 sources, 0 exposures, 0 metrics
+05:11:39
+05:11:40  Concurrency: 8 threads (target='dev')
+05:11:40
+05:11:40  1 of 2 START test accepted_values_table_sales_product__apple__pear__banana...... [RUN]
+05:11:40  2 of 2 START test not_null_table_sales_quantity................................. [RUN]
+05:11:42  2 of 2 PASS not_null_table_sales_quantity....................................... [PASS in 1.75s]
+05:11:42  1 of 2 PASS accepted_values_table_sales_product__apple__pear__banana............ [PASS in 1.96s]
+05:11:42
+05:11:42  Finished running 2 tests in 3.21s.
+05:11:42
+05:11:42  Completed successfully
+05:11:42
+05:11:42  Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
+```
