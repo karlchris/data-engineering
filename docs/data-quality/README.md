@@ -162,9 +162,9 @@ A solid framework standardizes the approach to managing data quality across the 
 Some open source frameworks can provide data quality based on use cases:
 
 - [dbt test](dbt-test/README.md) from [https://docs.getdbt.com/docs/build/data-tests](https://docs.getdbt.com/docs/build/data-tests)
-- [soda](soda/README.md) from [https://www.soda.io/](https://www.soda.io/)
-- [great expectations](great-expectations/README.md) from [https://greatexpectations.io/](https://greatexpectations.io/)
-- [open metadata](open-metadata/README.md) from [https://open-metadata.org/](https://open-metadata.org/)
+- [soda.io](https://www.soda.io/)
+- [great expectations](https://greatexpectations.io/)
+- [open metadata](https://open-metadata.org/)
 - many more
 
 Reference: [Educative - Data Quality](https://www.educative.io/courses/data-engineering-foundations)
