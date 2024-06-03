@@ -63,7 +63,7 @@ making it easy to deploy them across large amounts of data
 - clone the repo
 
 ```bash
-git clone git@github.com:karlchris/data-engineering.git
+git clone git@github.com:karlchris/great-expectations-bq.git
 ```
 
 - make sure you are in `data-engineering dir`, then run this command
