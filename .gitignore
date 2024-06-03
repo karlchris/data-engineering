@@ -2,3 +2,4 @@
 **/.local*
 **/uncommitted
 **/.ge_store*
+**/logs

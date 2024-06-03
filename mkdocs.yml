@@ -175,7 +175,7 @@ nav:
   
   - Projects:
     - List of Projects: 'projects/README.md'
-    - Running dbt and BigQuery using Docker: 'projects/dbt.md'
-    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations.md'
+    - Running dbt and BigQuery using Docker: 'projects/dbt-bq.md'
+    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
 
   - About me: 'author.md'

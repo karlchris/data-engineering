@@ -37,7 +37,7 @@ gcloud auth application-default login
 git clone git@github.com:karlchris/data-engineering.git
 ```
 
-- update your dbt [profiles.yml](profiles/profiles.yml) with your GCP **[project name]**
+- update your dbt `profiles.yml` with your GCP **[project name]**
 
 ```yaml
 data-eng:
