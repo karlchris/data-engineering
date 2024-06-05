@@ -71,22 +71,6 @@ Add features to your Kubernetes cluster without changing upstream source code.
 
     It provides a tool to communicate with a Kubernetes cluster's control plane, using Kubernetes API.
 
-### Advantages
-
-- In contrast to CeleryExecutor, KubernetesExecutor does not require additional components such as Redis, but does require access to Kubernetes cluster.
-- Monitoring Pods can be done with the built-in Kubernetes monitoring.
-- With KubernetesExecutor, each task runs in its own pod. The pod is created when the task is queued, and terminates when the task completes.
-- Resource utilization for each task doesn't need to be worried, because they will spawn each different pods and independent.
-
-!!! tip
-
-    In scenarios, such as burstable workloads, this presented a resource utilization advantage over CeleryExecutor, where you needed a fixed number of long-running Celery worker pods, whether or not there were tasks to run.
-
-### Disadvantages
-
-- Deploying using Kubernetes is very high learning curve to understand completely Kubernetes and you need to pay attention to every detail if you want to deploy it through Production. It's relatively quite complex.
-- with KubernetesExecutor, you will have more task latency because worker pod is triggered when Airflow trigger the task, it's not ready yet, it will take time to create the Pods.
-
 ## Airflow: Kubernetes Executor
 
 The Kubernetes executor runs each task instance in its own pod on a Kubernetes cluster.
@@ -104,6 +88,22 @@ This is an example of an Airflow deployment running on a distributed set of Kube
 ![airflow kubernetes infra](pics/airflow-kubernetes-infra.png)
 
 Consistent with the regular Airflow architecture, the Workers need access to the DAG files to execute the tasks within those DAGs and interact with the Metadata repository. Also, configuration information specific to the Kubernetes Executor, such as the worker namespace and image information, needs to be specified in the Airflow Configuration file.
+
+### Advantages
+
+- In contrast to CeleryExecutor, KubernetesExecutor does not require additional components such as Redis, but does require access to Kubernetes cluster.
+- Monitoring Pods can be done with the built-in Kubernetes monitoring.
+- With KubernetesExecutor, each task runs in its own pod. The pod is created when the task is queued, and terminates when the task completes.
+- Resource utilization for each task doesn't need to be worried, because they will spawn each different pods and independent.
+
+!!! tip
+
+    In scenarios, such as burstable workloads, this presented a resource utilization advantage over CeleryExecutor, where you needed a fixed number of long-running Celery worker pods, whether or not there were tasks to run.
+
+### Disadvantages
+
+- Deploying using Kubernetes is very high learning curve to understand completely Kubernetes and you need to pay attention to every detail if you want to deploy it through Production. It's relatively quite complex.
+- with KubernetesExecutor, you will have more task latency because worker pod is triggered when Airflow trigger the task, it's not ready yet, it will take time to create the Pods.
 
 ## Deploying Airflow on Kubernetes
 
