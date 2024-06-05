@@ -2,7 +2,7 @@
 
 ![airflow kubernetes](pics/airflow-kubernetes.png)
 
-## Quickstart about Kubernetes and DevOps
+## Quickstart about Kubernetes
 
 `Kubernetes` is a portable, extensible, open source platform for managing containerized workloads and services, that facilitates both declarative configuration and automation. It has a large, rapidly growing ecosystem. Kubernetes services, support, and tools are widely available.
 
@@ -129,22 +129,6 @@ git clone git@github.com:karlchris/airflow-k8s.git
 make init
 ```
 
-it will trigger to install these
-
-```bash
-#!/bin/bash
-
-echo "Installing Kubectl, KinD, Helm, docker and docker compose ..."
-
-brew install kubectl
-brew install kind
-brew install helm
-brew install docker
-brew install docker-compose
-
-echo "It's ready, you can proceed to install Airflow"
-```
-
 Output:
 
 ```bash
@@ -235,6 +219,24 @@ kube-system          Active   57m
 local-path-storage   Active   57m
 ```
 
+- Fetch airflow chart from Helm repository
+
+```bash
+make fetch
+```
+Output:
+
+```bash
+➜  airflow-k8s git:(master) ✗ make fetch
+Fetching airflow from Helm chart
+"apache-airflow" already exists with the same configuration, skipping
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "apache-airflow" chart repository
+Update Complete. ⎈Happy Helming!⎈
+NAME                    CHART VERSION   APP VERSION     DESCRIPTION                                       
+apache-airflow/airflow  1.13.1          2.8.3           The official Helm chart to deploy Apache Airflo...
+```
+
 - Install airflow Helm chart on Kubernetes cluster, this will take around 5 minutes.
 
 ```bash
@@ -320,19 +322,18 @@ To install dependencies, we can do this as follow:
 ```Dockerfile
 FROM apache/airflow:2.8.3
 RUN pip install apache-airflow-providers-apache-spark==4.8.1
+COPY ./dags/ \${AIRFLOW_HOME}/dags/
 ```
 
-- build the custom docker image
+- build the custom docker image and load image to KinD
 
 ```bash
-docker build -t airflow-base:1.0.0 .
+make load
 ```
 
-- load that image to kind
+Output:
 
 ```bash
-➜  airflow-k8s git:(master) ✗ kind load docker-image airflow-base:1.0.0 --name airflow-cluster
-
 Image: "airflow-base:1.0.0" with ID "sha256:5b938a838c583fb2ec534fb347eb6ceae32d76d3241661de5568803aa7e96de3" not yet present on node "airflow-cluster-worker", loading...
 Image: "airflow-base:1.0.0" with ID "sha256:5b938a838c583fb2ec534fb347eb6ceae32d76d3241661de5568803aa7e96de3" not yet present on node "airflow-cluster-worker3", loading...
 Image: "airflow-base:1.0.0" with ID "sha256:5b938a838c583fb2ec534fb347eb6ceae32d76d3241661de5568803aa7e96de3" not yet present on node "airflow-cluster-control-plane", loading...
@@ -352,7 +353,7 @@ defaultAirflowTag: "1.0.0"
 - upgrade the helm chart
 
 ```bash
-helm upgrade --install airflow-k8 apache-airflow/airflow -n airflow -f values.yaml --debug
+make upgrade
 ```
 
 - check the airflow provider list
@@ -371,9 +372,226 @@ package_name                             | description                          
 apache-airflow-providers-apache-spark    | Apache Spark https://spark.apache.org/                                                       | 4.8.1  
 ```
 
+## Adding Webserver key
+
+You should set a static webserver secret key when deploying with this chart as it will help ensure your Airflow components only restart when necessary.
+
+- run this command to create kubernetes secrets
+
+```bash
+kubectl apply -f secrets.yaml
+```
+
+```yaml title="secrets.yaml"
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: airflow
+  name: my-webserver-secret
+type: Opaque
+stringData:
+  webserverSecretKey: "$(python3 -c 'import secrets; print(secrets.token_hex(16))')"
+```
+
+- update in `values.yaml`
+
+```yaml
+# Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
+webserverSecretKey: my-webserver-secret
+webserverSecretKeySecretName: ~
+```
+
+- run this command to apply changes to Helm
+
+```bash
+make upgrade
+```
+
 ## Deploying DAG to Airflow
 
-## Running Spark DAG
+- Developers can put the `dag` files in `dags/` directory.
+- Then, run below command to rebuild the image and load to `KinD`
+
+```bash
+make load
+```
+
+- apply changes to helm chart
+
+```bash
+make upgrade
+```
+
+- you need to keep doing this once you added new DAG files.
+
+!!! tip
+
+    There are several approach to manage DAGs files.
+
+    You can follow it in official documentation [Apache Airflow - Manage DAGs files](https://airflow.apache.org/docs/helm-chart/1.9.0/manage-dags-files.html)
+
+## Running DAG
+
+There is new and interesting topic from Airflow, using TaskFlow API
+
+```python title="tutorial_taskflow_api_etl.py"
+import json
+import pendulum
+
+from airflow.decorators import dag, task
+
+
+@dag(
+    schedule_interval=None,
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=['taskflow-example'],
+)
+def tutorial_taskflow_api_etl():
+    """
+    ### TaskFlow API Tutorial Documentation
+    This is a simple ETL data pipeline example which demonstrates the use of
+    the TaskFlow API using three simple tasks for Extract, Transform, and Load.
+    Documentation that goes along with the Airflow TaskFlow API tutorial is
+    located
+    [here](https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html)
+    """
+
+    @task()
+    def extract():
+        """
+        #### Extract task
+        A simple Extract task to get data ready for the rest of the data
+        pipeline. In this case, getting data is simulated by reading from a
+        hardcoded JSON string.
+        """
+        data_string = '{"1001": 301.27, "1002": 433.21, "1003": 502.22}'
+
+        order_data_dict = json.loads(data_string)
+        return order_data_dict
+
+    @task(multiple_outputs=True)
+    def transform(order_data_dict: dict):
+        """
+        #### Transform task
+        A simple Transform task which takes in the collection of order data and
+        computes the total order value.
+        """
+        total_order_value = 0
+
+        for value in order_data_dict.values():
+            total_order_value += value
+
+        return {"total_order_value": total_order_value}
+
+    @task()
+    def load(total_order_value: float):
+        """
+        #### Load task
+        A simple Load task which takes in the result of the Transform task and
+        instead of saving it to end user review, just prints it out.
+        """
+
+        print(f"Total order value is: {total_order_value:.2f}")
+
+    order_data = extract()
+    order_summary = transform(order_data)
+    load(order_summary["total_order_value"])
+
+tutorial_etl_dag = tutorial_taskflow_api_etl()
+```
+
+It will be rendered as below through Airflow UI
+
+![taskflow](pics/taskflow.png)
+
+- click `Trigger DAG` (Play button in top right pane) to execute it right away
+
+Some key takeaways from TaskFlow API:
+
+- you just need to use `@dag` to instantiate a DAG.
+- only use decorator `@task` to create airflow task. And, you can interchange the values among tasks, just as easy as Python variables.
+
+!!! tip
+
+    more about the complete documentation, you can check on [Tutorial on TaskFlow API](https://airflow.apache.org/docs/apache-airflow/2.3.3/tutorial_taskflow_api.html#tasks)
+
+## Enabling logs
+
+With the `KubernetesExecutor`, Airflow creates a new Pod each time a task runs. Once the task is completed, Airflow deletes the Pod and so the logs.
+
+Therefore, you need a way to store your logs somewhere so that you can still access them. For local development, the easiest way is to configure a HostPath PV.
+
+- create `pv.yaml` for the PersistentVolume
+
+```yaml title="pv.yaml"
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: testlog-volume
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: /opt/airflow/logs/
+  storageClassName: standard
+```
+
+- create `pvc.yaml` for the PersistentVolumeClaim
+
+```yaml title="pvc.yaml"
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: testlog-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard
+```
+
+- run this command to apply both files
+
+```bash
+kubectl apply -f pv.yaml && \
+kubectl apply -f pvc.yaml
+```
+
+- update `values.yaml`
+
+```yaml
+logs:
+  persistence:
+    # Enable persistent volume for storing logs
+    enabled: true
+    # Volume size for logs
+    size: 100Gi
+    # Annotations for the logs PVC
+    annotations: {}
+    # If using a custom storageClass, pass name here
+    storageClassName:
+    ## the name of an existing PVC to use
+    existingClaim: testlog-volume
+```
+
+- run command to upgrade helm chart
+
+```bash
+make upgrade
+```
+
+## Cleaning up resources
+
+Make sure to clean up used resources, it's quite taking resource in local.
+
+```bash
+make clean
+```
 
 ## References
 
