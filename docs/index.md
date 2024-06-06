@@ -2,9 +2,10 @@
 
 Hello everyone :wave:
 
-SELAMAT DATANG !!! :indonesia:
+SELAMAT DATANG !!! (1)
+{ .annotate }
 
-_Selamat datang_ is "welcome" in Indonesia language. :green_heart:
+1. _Selamat datang_ is "welcome" in Indonesia :indonesia: language. :green_heart:
 
 I am **Karl Christian**, an experienced data guy.
 
@@ -24,6 +25,8 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 - Data Quality
 - Learning Python
 - Many more
+
+I also bring up the exciting projects for Data Engineering at [Projects](projects/README.md)
 
 Stay tune to this page, I will keep updating it to the most recent Data Engineering updates.
 
