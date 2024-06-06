@@ -1,0 +1,7 @@
+FROM markdownlint/markdownlint:0.13.0
+
+WORKDIR /docs
+COPY docs .
+COPY .mdlrc .
+
+ENTRYPOINT ["mdl", "/docs"]
