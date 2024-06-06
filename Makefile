@@ -5,9 +5,8 @@ IMG=de-kchrs
 USER := `whoami | tr . _`
 
 
-clean:
-	@docker stop $(docker ps -q) && \
-	docker system prune -f
+stop:
+	@docker stop ${IMG}
 
 # Build docker image for local development
 build-page:
@@ -21,6 +20,7 @@ dev:
 	@echo "Starting dev server in a docker container"
 	@docker run \
 		--rm -it \
+		--name ${IMG} \
 		-p 127.0.0.1:${PORT}:8000 \
 		-v ${PWD}:/docs \
 		${IMG}:dev
