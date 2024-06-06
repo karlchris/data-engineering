@@ -1,5 +1,7 @@
 # Automated Data Quality with Great Expectations and BigQuery
 
+![gx overview](pics/gx-overview.png)
+
 !!! warning "must have"
 
     Before starting this project, you need to install some prerequisites in your laptop:

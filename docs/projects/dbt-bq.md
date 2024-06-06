@@ -1,5 +1,7 @@
 # Running dbt and BigQuery using Docker
 
+![dbt bq docker](pics/dbt-bq-docker.png)
+
 !!! warning "must have"
 
     Before starting this project, you need to install some prerequisites in your laptop:
