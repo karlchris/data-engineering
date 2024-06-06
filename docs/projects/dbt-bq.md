@@ -215,15 +215,15 @@ root@d94bac5d04ab:/dbt# dbt docs serve --target dev
 
 ```makefile
 run-dbt:
-	@echo "Running dbt in container"
-	@docker run \
-		-e DESTINATION=${USER} \
-		-e DBT_ENV=dev \
-		--rm \
-		-v ${GCP_AUTH}:/creds -it \
-		--entrypoint /bin/bash \
-		-p 8082:8080 \
-		dbt
+ @echo "Running dbt in container"
+ @docker run \
+  -e DESTINATION=${USER} \
+  -e DBT_ENV=dev \
+  --rm \
+  -v ${GCP_AUTH}:/creds -it \
+  --entrypoint /bin/bash \
+  -p 8082:8080 \
+  dbt
 ```
 
 - you can see the DAG lineage through the URL as below

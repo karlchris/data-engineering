@@ -18,10 +18,9 @@ Containers have become popular because they provide extra benefits, such as:
 - **Resource isolation**: predictable application performance.
 - **Resource utilization**: high efficiency and density.
 
-
 ### Why you need Kubernetes
 
-Containers are a good way to bundle and run your applications. In a production environment, you need to manage the containers that run the applications and ensure that there is no downtime. 
+Containers are a good way to bundle and run your applications. In a production environment, you need to manage the containers that run the applications and ensure that there is no downtime.
 
 !!! example
 
@@ -224,6 +223,7 @@ local-path-storage   Active   57m
 ```bash
 make fetch
 ```
+
 Output:
 
 ```bash

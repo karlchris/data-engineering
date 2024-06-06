@@ -35,9 +35,9 @@ The target system polls on an interval and updates the target database according
 
 3 steps of the time-based CDC approach are:
 
-1. Get the maximum value of `update_timestamp` in the target system. This was when the last sync happened.
-2. Select all the rows from the source with `update_timestamp > the target's maximum timestamp`.
-3. Insert or modify existing rows in the target system.
+- Get the maximum value of `update_timestamp` in the target system. This was when the last sync happened.
+- Select all the rows from the source with `update_timestamp > the target's maximum timestamp`.
+- Insert or modify existing rows in the target system.
 
 #### Pros
 
@@ -60,9 +60,9 @@ The changelog table is stored in the database itself and is a sequence of state-
 
 3 steps of the trigger-based CDC approach:
 
-1. Create 3 triggers for each source table.
-2. Whenever a row's state changes, a corresponding trigger appends a new row to the changelog table.
-3. The changelog table propagates the changes to the target table instantly.
+- Create 3 triggers for each source table.
+- Whenever a row's state changes, a corresponding trigger appends a new row to the changelog table.
+- The changelog table propagates the changes to the target table instantly.
 
 #### Pros
 

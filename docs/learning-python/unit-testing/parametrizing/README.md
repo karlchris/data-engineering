@@ -1,4 +1,4 @@
-## Parametrization
+# Parametrization
 
 **Test parametrization** is a feature in pytest that allows us to write a single test function and test it with multiple input values.
 It is a way of writing concise tests that can cover many cases with minimal code.
