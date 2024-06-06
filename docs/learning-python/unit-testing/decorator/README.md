@@ -1,4 +1,4 @@
-## Mark Decorator
+# Mark Decorator
 
 **Pytest marking** is a feature that enables categorizing tests and applying specific behaviors or actions to them.
 It involves tagging tests with markers, which can then be utilized to select, filter, or customize how the tests are executed.

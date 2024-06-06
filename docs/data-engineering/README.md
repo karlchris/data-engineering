@@ -17,9 +17,9 @@ The data engineering life cycle involves a series of processes, which can be cat
 
 Overview:
 
-1. The life cycle begins with getting data from multiple sources and ingesting it into the storage.
-2. Next, data is transformed from its original format into a format for the downstream use cases.
-3. Last, the transformed data is fed into different business intelligence (BI) tools to draw business insights.
+- The life cycle begins with getting data from multiple sources and ingesting it into the storage.
+- Next, data is transformed from its original format into a format for the downstream use cases.
+- Last, the transformed data is fed into different business intelligence (BI) tools to draw business insights.
 
 !!! info
 

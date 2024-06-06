@@ -24,3 +24,8 @@ dev:
 		-p 127.0.0.1:${PORT}:8000 \
 		-v ${PWD}:/docs \
 		${IMG}:dev
+
+test:
+	@docker build . -f Dockerfile-test \
+		-t ${IMG}:test
+	@docker run ${IMG}:test

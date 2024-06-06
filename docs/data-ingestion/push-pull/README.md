@@ -58,7 +58,7 @@ In real time, messages are pushed from one side to the other until one party clo
 
     This example is compatible to run only on `Linux`
 
-1. Download the `websocat` package with the following commands.
+- Download the `websocat` package with the following commands.
 
 ```bash
 sudo wget -qO /usr/local/bin/websocat https://github.com/vi/websocat/releases/latest/download/websocat.x86_64-unknown-linux-musl
@@ -66,7 +66,7 @@ sudo chmod a+x /usr/local/bin/websocat
 websocat --version
 ```
 
-2. Open a new terminal tab, run
+- Open a new terminal tab, run
 
 ```bash
 websocat -s 1234
@@ -74,7 +74,7 @@ websocat -s 1234
 
 it will start a server on the port `1234`
 
-3. Open another a new terminal tab, run
+- Open another a new terminal tab, run
 
 ```bash
 websocat ws://127.0.0.1:1234/
@@ -82,7 +82,7 @@ websocat ws://127.0.0.1:1234/
 
 it will create a client listening to port `1234`
 
-4. Now the connection has been established between server and client, you can type anything on either side and should receive them on other other side.
+- Now the connection has been established between server and client, you can type anything on either side and should receive them on other other side.
 
 !!! info
 

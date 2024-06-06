@@ -1,4 +1,4 @@
-name: deploy-gh-page
+name: cd
 on:
   push:
     branches:

@@ -18,12 +18,12 @@ On the other hand, when using a declarative programming language like SQL, we in
 
 ![life cycle of query](../pics/query-life-cycle.png)
 
-1. A SQL statement is submitted to the database via a transport layer protocol such as TCP.
-2. To proceed, some kind of API requests must occur, such as authenticating and authorizing the request.
-3. Next, the SQL statement is sent to a query parser that analyzes the syntactic and semantic meaning. As a result, a query tree is generated.
-4. Once the query is parsed, it is sent to a query optimizer that looks for the most efficient way to execute the query, and a query execution plan is generated afterward.
-5. Once the plan is in place, the database will walk through it and execute each stage in the plan.
-6. Finally, when the query has finished execution, the result will be sent back to users.
+- A SQL statement is submitted to the database via a transport layer protocol such as TCP.
+- To proceed, some kind of API requests must occur, such as authenticating and authorizing the request.
+- Next, the SQL statement is sent to a query parser that analyzes the syntactic and semantic meaning. As a result, a query tree is generated.
+- Once the query is parsed, it is sent to a query optimizer that looks for the most efficient way to execute the query, and a query execution plan is generated afterward.
+- Once the plan is in place, the database will walk through it and execute each stage in the plan.
+- Finally, when the query has finished execution, the result will be sent back to users.
 
 ## Query Parser
 
@@ -51,7 +51,7 @@ BigQuery is a fully managed, serverless, cloud-based data warehouse, meaning tha
 
 Steps:
 
-1. BigQuery allocates a set of slots to access the distributed storage and read data from the table.
+- BigQuery allocates a set of slots to access the distributed storage and read data from the table.
    BigQUery uses columnar storage, meaning that each column's data resides within one or multiple files in the distributed file system.
    When running the query, only the columns needed for the query will be selected, which minimizes I/O operations.
 
@@ -59,12 +59,12 @@ Steps:
 
     Besides, columnar storage allows for better compression, resulting in reduced storage space and improved data retrieval speed.
 
-2. A slot is a virtual CPU used by BigQuery to execute queries.
+- A slot is a virtual CPU used by BigQuery to execute queries.
    In this example, each slot reads one input file, applying filters on `start_station_name` and subsequently, append the count of the valid records in this file to the shuffle
 
 ![query processing in BigQuery](../pics/query-processing-bq.png)
 
-3. Next, a separate slot reads from the shuffle and aggregates the counts from different input files together as the final count.
+- Next, a separate slot reads from the shuffle and aggregates the counts from different input files together as the final count.
    Ultimately, this result is written into an output file that is accessible to the user.
 
 ### Benefits
