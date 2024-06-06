@@ -18,6 +18,12 @@ make dev
 
 it will run the docker image and expose the UI to `http://localhost:8000/data-engineering/`.
 
+## Lint files and test it out
+
+```bash
+make test
+```
+
 ## Clean up
 
 run this command
