@@ -8,7 +8,7 @@
     - [gcloud CLI](https://cloud.google.com/sdk/docs/install)
     - [GCP console](https://console.cloud.google.com/)
 
-    If you haven't create any project in Google Cloud Platform, please follow [this](dbt.md#interact-with-google-cloud-platform)
+    If you haven't create any project in Google Cloud Platform, please follow [this](dbt-bq.md#interact-with-google-cloud-platform)
 
 ## Great Expectations
 

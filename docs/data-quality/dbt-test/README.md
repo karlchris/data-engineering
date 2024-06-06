@@ -86,4 +86,4 @@ from (
 
     In addition, dbt provides a common framework for testing, making it easier for teams to collaborate and share knowledge.
 
-If you want to run some example, refer to [Running dbt and Google BigQuery using Docker](../../projects/dbt/README.md#testing-data-quality)
+If you want to run some example, refer to [Running dbt and Google BigQuery using Docker](../../projects/dbt-bq.md#testing-data-quality)

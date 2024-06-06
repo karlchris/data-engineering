@@ -159,6 +159,6 @@ FROM my_table
 
 !!! tip
 
-    You can find project example of running dbt: [Running **dbt** and **Google BigQuery** using **Docker**](../../projects/dbt/README.md)
+    You can find project example of running dbt: [Running **dbt** and **Google BigQuery** using **Docker**](../../projects/dbt-bq.md)
 
 Reference: [dbt Documentation](https://docs.getdbt.com/)

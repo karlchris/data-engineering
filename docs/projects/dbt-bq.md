@@ -228,15 +228,15 @@ run-dbt:
 
 - you can see the DAG lineage through the URL as below
 
-![dag lineage](../pics/dag-lineage.png)
+![dag lineage](pics/dag-lineage.png)
 
 and you can also see each of dbt models informations, such as: details, descriptions, column and code.
 
-![dbt ui](../pics/dbt-ui.png)
+![dbt ui](pics/dbt-ui.png)
 
 ## Testing data quality
 
-- to perform data quality check on dbt, written in [schema.yml](../../../projects/dbt/models/example/schema.yml)
+- to perform data quality check on dbt, written in `schema.yml`
 
 ```yaml
 version: 2
