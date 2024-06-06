@@ -28,4 +28,4 @@ dev:
 test:
 	@docker build . -f Dockerfile-test \
 		-t ${IMG}:test
-	@docker run ${IMG}:test
+	@docker run --rm  --name ${IMG}-test ${IMG}:test
