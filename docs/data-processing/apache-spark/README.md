@@ -122,6 +122,12 @@ Each driver program has a web UI, typically on port 4040, that displays informat
 
 Spark gives control over resource allocation both across applications (at the level of the cluster manager) and within applications (if multiple computations are happening on the same **SparkContext**).
 
+## Spark Optimization
+
+There are several techniques to more optimize spark jobs, such as:
+
+- [Partitioning and Bucketing](partitioning-bucketing.md)
+
 ## References
 
 - [Apache Spark](https://spark.apache.org/)
