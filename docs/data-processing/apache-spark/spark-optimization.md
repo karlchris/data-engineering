@@ -327,6 +327,46 @@ You are supposed to use bucketing while the column cardinality is quite high, me
 
 In some cases, combining partitioning and bucketing can yield the best results. You can partition data by a high-level category and then bucket it within each partition.
 
+## PySpark code
+
+!!! warning
+
+    to run following code, you need to have write access to the writing directory or external locations, such as: `S3 bucket` or `GCS`.
+
+    You also might need to setup connections to the `Hive Metastore`.
+
+Here is an example of pyspark code
+
+```python
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('partition-bucket-app').getOrCreate()
+
+df = spark.createDataFrame(
+    [("person_1", "20"), ("person_2", "56"), ("person_3", "89"), ("person_4", "20")],
+    ["name","age"]
+)
+
+# Partitionning
+df = df.repartition(4, "age")
+print(df.rdd.getNumPartitions())
+
+# Coalesce
+df = df.coalesce(2)
+print(df.rdd.getNumPartitions())
+
+# PartitionBy
+df.write.mode("overwrite").partitionBy("age").csv("data/output")
+
+# Bucketing 
+df.write.bucketBy(5, "age").saveAsTable("bucketed_table")
+
+df.write.bucketBy(10, "age")\
+    .sortBy("name")\
+    .saveAsTable("sorted_bucketed_table")
+```
+
 ## References
 
 - [Recommendations for Optimizing a Spark job](https://towardsdatascience.com/6-recommendations-for-optimizing-a-spark-job-5899ec269b4b)
