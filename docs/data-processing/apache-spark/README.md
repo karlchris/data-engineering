@@ -75,17 +75,29 @@ The Spark framework includes:
 
 ![spark architecture](../pics/spark-architecture.png)
 
-**Spark** applications run as independent sets of processes on a cluster, coordinated by the SparkContext object in your main program (called the driver program).
+Applications of Spark architecture which exists in above diagram:
 
-Specifically, to run on a cluster, the SparkContext can connect to several types of **cluster managers** (either Spark’s own standalone cluster manager, Mesos, YARN or Kubernetes), which allocate resources across applications.
+### Spark driver
 
-Once connected, Spark acquires executors on **nodes** in the cluster, which are processes that run computations and store data for your application.
+The driver is the program or process responsible for coordinating the execution of the Spark application. It runs the main function and creates the SparkContext, which connects to the cluster manager.
 
-Next, it sends your application code (defined by JAR or Python files passed to SparkContext) to the executors.
+### Spark executors
 
-Finally, **SparkContext** sends tasks to the executors to run.
+Executors are worker processes responsible for executing tasks in Spark applications. They are launched on worker nodes and communicate with the driver program and cluster manager. Executors run tasks concurrently and store data in memory or disk for caching and intermediate storage.
 
-There are several useful things to note about this architecture:
+### Cluster manager
+
+The cluster manager is responsible for allocating resources and managing the cluster on which the Spark application runs. Spark supports various cluster managers like Apache Mesos, Hadoop YARN, and standalone cluster manager.
+
+### sparkContext
+
+SparkContext is the entry point for any Spark functionality. It represents the connection to a Spark cluster and can be used to create RDDs (Resilient Distributed Datasets), accumulators, and broadcast variables. SparkContext also coordinates the execution of tasks.
+
+### Task
+
+A task is the smallest unit of work in Spark, representing a unit of computation that can be performed on a single partition of data. The driver program divides the Spark job into tasks and assigns them to the executor nodes for execution.
+
+### Useful things to note about this architecture
 
 - **Each application gets its own executor processes, which stay up for the duration of the whole application and run tasks in multiple threads**
 
@@ -124,9 +136,7 @@ Spark gives control over resource allocation both across applications (at the le
 
 ## Spark Optimization
 
-There are several techniques to more optimize spark jobs, such as:
-
-- [Partitioning and Bucketing](partitioning-bucketing.md)
+There are several techniques to more optimize spark jobs, we can look into [Spark Optimization](spark-optimization.md)
 
 ## References
 

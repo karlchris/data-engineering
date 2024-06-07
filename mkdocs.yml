@@ -150,7 +150,7 @@ nav:
     - What is Data Processing?: 'data-processing/README.md'
     - Apache Spark:
       - What is Apache Spark?: 'data-processing/apache-spark/README.md'
-      - Spark Partitioning and Bucketing: 'data-processing/apache-spark/partitioning-bucketing.md'
+      - Spark Optimizations: 'data-processing/apache-spark/spark-optimization.md'
     - Google BigQuery:
       - What is Google BigQuery?: 'data-processing/bigquery/README.md'
 

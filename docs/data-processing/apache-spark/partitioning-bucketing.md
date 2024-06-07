@@ -1,1 +1,0 @@
-# Spark Partitioning and Bucketing
