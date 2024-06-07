@@ -84,6 +84,22 @@ MapReduce is slowly being phased out of Big Data offerings. While some vendors s
 
 Customers have moved away from creating MapReduce applications, instead adopting simpler and faster frameworks like Apache Spark.
 
+## MapReduce and Hadoop
+
+![hadoop](pics/hadoop.png)
+
+MapReduce is part of the Apache Hadoop framework that is used to access data stored in Hadoop Distributed File System (HDFS).
+
+Hadoop consists of four basic modules:
+
+- **Hadoop Distributed File System (HDFS)**: This ia a distributed file system that can store large datasets in a fault-tolerant fashion
+
+- **Yet Another Resource Negotiation (YARN)**: This is the node manager that monitors cluster and resources. It also acts as the scheduler of jobs
+
+- **MapReduce**
+
+- **Hadoop Common**: This is a module that provides commonly used Java libraries
+
 ## What is MapReduce used for?
 
 Legacy applications and Hadoop native tools like Sqoop and Pig leverage MapReduce today.
@@ -101,3 +117,4 @@ We will deep dive into some updated framework, such as:
 
 - [MapReduce](https://www.databricks.com/glossary/mapreduce)
 - [Processing Data at Scale with MapReduce](https://towardsdatascience.com/mapreduce-f0d8776d0fcf)
+- [Apache Hadoop](https://hadoop.apache.org/)
