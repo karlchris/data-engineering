@@ -205,7 +205,125 @@ We can modify the following 2 parameters:
 
 ## Partitioning
 
+Partitioning in Spark refers to the division of data into smaller, more manageable chunks known as `partitions`.
+Partitions are the basic units of parallelism in Spark, and they allow the framework to process different portions of the data simultaneously on different nodes in a cluster.
+
+### Why partition data?
+
+Partitioning serves several essential purposes in Spark:
+
+- **Parallelism**
+
+By dividing data into partitions, Spark can distribute these partitions across multiple nodes in a cluster. This enables parallel processing, significantly improving the performance of data operations.
+
+- **efficient data processing**
+
+Smaller partitions are easier to manage and manipulate. When a specific operation is performed on a partition, it affects a smaller subset of the data, reducing memory overhead.
+
+- **data locality**
+
+Spark aims to process data where it resides. By creating partitions that align with the distribution of data across nodes, Spark can optimize data locality, minimizing data transfer over the network.
+
+Spark uses 2 types of partitioning:
+
+### Partitioning in memory
+
+While transfrorming data Spark allows users to control partitioning explicitly by using `repartition` or `coalesce`.
+
+#### repartition
+
+- It allows to specify the desired number of partitions and the column(s) to partition by.
+- It shuffles the data to create the specified number of partitions.
+
+#### coalesce
+
+- It reduces the number of partitions by merging them.
+- It’s useful when you want to decrease the number of partitions for efficiency.
+
+!!! info
+
+    By default, Spark/PySpark creates partitions that are equal to the number of CPU cores in the machine.
+
+!!! example
+
+    We repartition data into 4 partitions based on a column named `sex`.
+
+    ```python
+    df = df.repartition(4, "sex")
+    print(df.rdd.getNumPartitions())
+    ```
+
+### Partitioning on disk
+
+When writing data in Spark, the `partitionBy()` method is used to partition the data into a file system, resulting in multiple sub-directories.
+
+> This partitioning enhances the read performance for downstream systems.
+
+The function can be applied to one or multiple column values while writing a DataFrame to the disk. 
+Based on these values, Spark splits the records according to the partition column and stores the data for each partition in a respective sub-directory.
+
+In the following code, we are saving data to the file system in parquet format, partitioning it based on the `sex` column.
+
+```python
+df.write.mode("overwrite").partitionBy("sex").parquet("data/output")
+```
+
+Output
+
+![partition on disk](../pics/partition-on-disk.png)
+
 ## Bucketing
+
+Bucketing is a technique used in Spark for optimizing data storage and querying performance, especially when dealing with large datasets. It involves dividing data into a fixed number of buckets and storing each bucket as a separate file.
+
+### Why bucket data?
+
+- **Efficient Data Retrieval**
+
+When querying data, Spark can narrow down the search by reading only specific buckets, reducing the amount of data to scan. This results in faster query performance.
+
+- **Uniform Bucket Sizes**
+
+Bucketing ensures that each bucket contains approximately the same number of records, preventing data skew.
+
+### How to bucket data
+
+Bucketing is typically applied to DataFrames or tables using the `bucketBy` method in Spark SQL. You specify the number of buckets and the column to bucket by.
+
+!!! example
+
+    we create 5 buckets based on a column named `age` then we write data to a table named `bucketed_table`
+
+    ```python
+    df.write.bucketBy(5, "age").saveAsTable("bucketed_table")
+    ```
+
+    You can also specify sorting within buckets, which can further optimize certain query types
+
+    ```python
+    df.write.bucketBy(10, "age")\
+        .sortBy("name")\
+        .saveAsTable("sorted_bucketed_table")
+    ```
+
+## Choosing between **partitioning** and **bucketing**
+
+The decision of whether to use partitioning or bucketing (or both) in your Spark application depends on the specific use case and query patterns.
+
+Here are some guidelines:
+
+- **Partitioning**
+
+when you need to distribute data for parallel processing and optimize data locality. It’s beneficial for `filtering` and `joins` where the filter condition aligns with the partition key.
+
+- **Bucketing**
+
+when you have large datasets and want to optimize query performance, especially for equality-based filters. It’s beneficial for scenarios where data is frequently queried with specific criteria.
+You are supposed to use bucketing while the column cardinality is quite high, means data variance is a lot, using partitioning in this type of data will create a lot of files, leads to `small files problem`.
+
+- **Combining Both**
+
+In some cases, combining partitioning and bucketing can yield the best results. You can partition data by a high-level category and then bucket it within each partition.
 
 ## References
 
