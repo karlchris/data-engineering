@@ -146,7 +146,13 @@ nav:
       - Airflow DAG Design: 'data-orchestration/airflow/airflow-dag-design.md'
     - Data Build Tool (dbt): 'data-orchestration/dbt/README.md'
 
-  - Data Processing: 'data-processing/README.md'
+  - Data Processing:
+    - What is Data Processing?: 'data-processing/README.md'
+    - Apache Spark:
+      - What is Apache Spark?: 'data-processing/apache-spark/README.md'
+      - Spark Partitioning and Bucketing: 'data-processing/apache-spark/partitioning-bucketing.md'
+    - Google BigQuery:
+      - What is Google BigQuery?: 'data-processing/bigquery/README.md'
 
   - Data Quality: 
     - What is data quality?: 'data-quality/README.md'
