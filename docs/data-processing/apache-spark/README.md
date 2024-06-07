@@ -143,3 +143,4 @@ There are several techniques to more optimize spark jobs, we can look into [Spar
 - [Apache Spark](https://spark.apache.org/)
 - [AWS - What is Apache Spark?](https://aws.amazon.com/what-is/apache-spark/)
 - [Apache Spark - Cluster Overview](https://spark.apache.org/docs/latest/cluster-overview.html)
+- [Spark Architecture: A Deep Dive](https://medium.com/@amitjoshi7/spark-architecture-a-deep-dive-2480ef45f0be)
