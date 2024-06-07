@@ -1,5 +1,7 @@
 # Apache Spark
 
+![apache spark](../pics/apache-spark.png)
+
 Apache Spark is a multi-language engine for executing data engineering, data science, and machine learning on single-node machines or clusters.
 
 Some of the key features:
@@ -70,5 +72,6 @@ The Spark framework includes:
 ![apache spark workloads](../pics/apache-spark-workloads.png)
 
 ## References
-- [Apache Spark]()
-- [AWS - What is Apache Spark?]()
+
+- [Apache Spark](https://spark.apache.org/)
+- [AWS - What is Apache Spark?](https://aws.amazon.com/what-is/apache-spark/)
