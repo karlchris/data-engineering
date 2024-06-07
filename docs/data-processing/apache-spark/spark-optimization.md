@@ -310,6 +310,8 @@ Bucketing is typically applied to DataFrames or tables using the `bucketBy` meth
 
 The decision of whether to use partitioning or bucketing (or both) in your Spark application depends on the specific use case and query patterns.
 
+![partitioning-bucketing](../pics/partitioning-bucketing.png)
+
 Here are some guidelines:
 
 - **Partitioning**
