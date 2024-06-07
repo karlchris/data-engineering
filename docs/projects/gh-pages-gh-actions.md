@@ -97,9 +97,8 @@ rules "~MD013", "~MD046", "~MD036", "~MD026", "~MD009", "~MD024", "~MD022", "~MD
 
 ```yaml title=".github/workflows/ci.yaml"
 name: ci
-on:
-  pull_request:
-    types: [opened, reopened]
+on: pull_request
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -107,6 +106,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: execute test
         run: make test
+
 ```
 
 CI will be triggered every time GH Pull Request is opened or reopened and perform the testings.
