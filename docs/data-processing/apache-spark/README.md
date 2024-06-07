@@ -29,8 +29,11 @@ docker run -it --rm spark:python3 /opt/spark/bin/pyspark
 ```
 
 ```python
-df = spark.read.json("logs.json")
-df.where("age > 21").select("name.first").show()
+df = spark.createDataFrame(
+    [("person_1", "20"), ("person_2", "56"), ("person_3", "89"), ("person_4", "20")],
+    ["name","age"]
+)
+df.where("age > 21").select("name").show()
 ```
 
 ## How does Apache Spark work?
@@ -143,3 +146,4 @@ There are several techniques to more optimize spark jobs, we can look into [Spar
 - [Apache Spark](https://spark.apache.org/)
 - [AWS - What is Apache Spark?](https://aws.amazon.com/what-is/apache-spark/)
 - [Apache Spark - Cluster Overview](https://spark.apache.org/docs/latest/cluster-overview.html)
+- [Spark Architecture: A Deep Dive](https://medium.com/@amitjoshi7/spark-architecture-a-deep-dive-2480ef45f0be)
