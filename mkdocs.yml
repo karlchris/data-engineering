@@ -188,5 +188,6 @@ nav:
     - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
     - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
     - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
+    - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
 
   - About me: 'author.md'
