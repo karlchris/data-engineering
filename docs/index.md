@@ -1,4 +1,4 @@
-# Data Engineering Handbook
+# Data Engineering Notes
 
 Hello everyone :wave:
 
@@ -26,9 +26,9 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 - Learning Python
 - Many more
 
-I also bring up the exciting projects for Data Engineering at [Projects](projects/README.md)
+I also bring up the exciting [projects](projects/README.md) for Data Engineering
 
-Stay tune to this page, I will keep updating it to the most recent Data Engineering updates.
+Stay tune to this notes, I will keep updating it to the most recent Data Engineering updates.
 
 !!! quote
 
