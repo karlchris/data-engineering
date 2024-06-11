@@ -8,8 +8,8 @@ repo_url: https://github.com/karlchris/data-engineering
 theme:
   name: material
 
-  favicon: assets/img/database-storage.ico
-  logo: assets/img/database-storage.ico
+  favicon: assets/img/code.ico
+  logo: assets/img/code.ico
 
   icon:
     annotation: material/plus-circle
