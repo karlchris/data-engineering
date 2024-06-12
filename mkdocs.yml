@@ -1,6 +1,7 @@
 site_name: Data Engineering Notes
 site_url: https://karlchris.github.io/data-engineering/
 
+copyright: Copyright &copy; 2024 Karl Christian
 
 # Github spec
 repo_url: https://github.com/karlchris/data-engineering
@@ -101,6 +102,15 @@ markdown_extensions:
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/karllchris
+    - icon: fontawesome/brands/github
+      link: https://github.com/karlchris
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@karl.christian
 
 # Pages Navigations
 nav:
