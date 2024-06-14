@@ -2,6 +2,12 @@
 
 ![spark-docker-diagram](pics/spark-docker-diagram.png)
 
+For better following this exercise, you should clone the repo `spark-docker`
+
+```bash
+git clone git@github.com:karlchris/spark-docker.git
+```
+
 ## Spark Containers and Components
 
 There are several Spark containers which we need to execute at once and connect them altogether.
