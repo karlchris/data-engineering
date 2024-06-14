@@ -16,7 +16,7 @@ build-page:
 		--build-arg MKDM_VERSION=${MKDM_VERSION}
 
 # Run dev server in docker
-dev:
+dev: build-page
 	@echo "Starting dev server in a docker container"
 	@docker run \
 		--rm -d \
