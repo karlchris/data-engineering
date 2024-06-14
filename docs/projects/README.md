@@ -7,5 +7,6 @@ Hi, you will find list of projects which I had worked on so far:
 - [Deploying and Running Airflow on Kubernetes](airflow-k8s.md)
 - [Building Github Pages using Github Actions](gh-pages-gh-actions.md)
 - [Running Apache Flink on Kubernetes](flink-k8s.md)
+- [Running Spark using Docker Compose](spark-docker.md)
 
 Stay tune, I will keep adding this list.

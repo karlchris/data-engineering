@@ -199,5 +199,6 @@ nav:
     - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
     - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
     - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
+    - Running Spark using Docker Compose: 'projects/spark-docker.md'
 
   - About me: 'author.md'
