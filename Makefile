@@ -24,6 +24,7 @@ dev: build-page
 		-p 127.0.0.1:${PORT}:8000 \
 		-v ${PWD}:/docs \
 		${IMG}:dev
+	@echo "http://localhost:8000 is ready"
 
 test:
 	@docker build . -f Dockerfile-test \

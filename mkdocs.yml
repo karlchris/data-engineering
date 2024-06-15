@@ -9,8 +9,8 @@ repo_url: https://github.com/karlchris/data-engineering
 theme:
   name: material
 
-  favicon: assets/img/code.ico
-  logo: assets/img/code.ico
+  favicon: assets/img/sqldeveloper-original.svg
+  logo: assets/img/sqldeveloper-original.svg
 
   icon:
     annotation: material/plus-circle
