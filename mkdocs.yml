@@ -168,7 +168,7 @@ nav:
     - What is data quality?: 'data-quality/README.md'
     - dbt test: 'data-quality/dbt-test/README.md'
 
-  - Learning Python:
+  - Python:
     - Why Python?: 'learning-python/README.md'
     - Object Oriented Programming:
       - What is OOP?: 'learning-python/oop/README.md'
