@@ -9,5 +9,6 @@ Hi, you will find list of projects which I had worked on so far:
 - [Running Apache Flink on Kubernetes](flink-k8s.md)
 - [Running Spark using Docker Compose](spark-docker.md)
 - [Querying Streaming Data in Kafka using ksql](kafka-ksql.md)
+- [Building Machine Learning Pipeline using MLflow on Kubernetes](mlflow-k8s.md)
 
 Stay tune, I will keep adding this list.
