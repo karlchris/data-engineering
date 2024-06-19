@@ -200,5 +200,6 @@ nav:
     - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
     - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
     - Running Spark using Docker Compose: 'projects/spark-docker.md'
+    - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
 
   - About me: 'author.md'
