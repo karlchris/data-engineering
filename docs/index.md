@@ -16,9 +16,13 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 
 ## Overview
 
-First, I bring up some exciting projects about data engineering, check it out here [projects](projects/README.md).
+!!! tip
 
-I assure it's easy to follow even for beginners. But, if you want to deep dive into the topics and get basic/advance understandings, I suggest you go through the learning tabs, such as below:
+   First, I bring up some exciting projects about data engineering, check it out here [projects](projects/README.md).
+
+> I assure it's easy to follow even for beginners.
+
+If you want to deep dive into the topics and get basic/advance understandings, I suggest you go through the **learning** tabs, such as below:
 
 - Data Engineering
 - Data Modeling
