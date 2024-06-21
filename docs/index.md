@@ -18,7 +18,7 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 
 !!! tip
 
-   First, I bring up some exciting projects about data engineering, check it out here [projects](projects/README.md).
+    First, I bring up some exciting projects about data engineering, check it out here [projects](projects/README.md).
 
 > I assure it's easy to follow even for beginners.
 
