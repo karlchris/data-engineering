@@ -116,6 +116,17 @@ extra:
 nav:
   - Preface: 'index.md'
 
+  - Projects:
+    - List of Projects: 'projects/README.md'
+    - Running dbt and BigQuery using Docker: 'projects/dbt-bq.md'
+    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
+    - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
+    - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
+    - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
+    - Running Spark using Docker Compose: 'projects/spark-docker.md'
+    - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
+    - Apache Iceberg and PySpark: 'projects/spark-iceberg.md'
+
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
     - Ingestion: 'data-engineering/ingestion/README.md'
@@ -191,16 +202,5 @@ nav:
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
-  
-  - Projects:
-    - List of Projects: 'projects/README.md'
-    - Running dbt and BigQuery using Docker: 'projects/dbt-bq.md'
-    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
-    - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
-    - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
-    - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
-    - Running Spark using Docker Compose: 'projects/spark-docker.md'
-    - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
-    - Apache Iceberg and PySpark: 'projects/spark-iceberg.md'
 
   - About me: 'author.md'
