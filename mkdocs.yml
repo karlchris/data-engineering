@@ -163,7 +163,7 @@ plugins:
 
 # Pages tree
 nav:
-  - Preface: 'index.md'
+  - Home: 'index.md'
 
   - Projects:
     - List of Projects: 'projects/README.md'
