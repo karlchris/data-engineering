@@ -25,4 +25,5 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material==9.5.24
+      - run: pip install -r requirements.txt
       - run: mkdocs gh-deploy --force
