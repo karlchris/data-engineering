@@ -10,6 +10,6 @@ Hi, you will find list of projects which I had worked on so far:
 - [Running Spark using Docker Compose](spark-docker.md)
 - [Querying Streaming Data in Kafka using ksql](kafka-ksql.md)
 - [Apache Iceberg and PySpark](spark-iceberg.md)
-- [Delta Lake with Apache Spark: Delta-Spark](delta-spark.md)
+- [Delta Lake with Apache Spark](delta-spark.md)
 
 Stay tune, I will keep adding this list.
