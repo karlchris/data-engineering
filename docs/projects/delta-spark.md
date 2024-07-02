@@ -1072,3 +1072,4 @@ In addition, there is provided streaming query statistics, showing metrics for C
 - [Delta Lake for ETL](https://delta.io/blog/delta-lake-etl/)
 - [Delta Lake Optimize](https://delta.io/blog/delta-lake-optimize/)
 - [Delta Lake Introduction](https://medium.com/@ansabiqbal/delta-lake-introduction-with-examples-using-pyspark-cb2a0d7a549d)
+- [Use Delta Lake change data feed on Databricks](https://docs.databricks.com/en/delta/delta-change-data-feed.html)
