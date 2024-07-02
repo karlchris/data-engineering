@@ -945,14 +945,14 @@ finally:
 
 It will do some steps:
 
--  create student table
--  show table data and all the changes
--  perform any `UPDATE`
--  perform `DELETE`
--  perform partition `DELETE`
--  create source table for `MERGE`
--  perform `MERGE`
--  Stream changes
+- create student table
+- show table data and all the changes
+- perform any `UPDATE`
+- perform `DELETE`
+- perform partition `DELETE`
+- create source table for `MERGE`
+- perform `MERGE`
+- Stream changes
   
 to run the code, simply run below command
 
