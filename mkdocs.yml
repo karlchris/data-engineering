@@ -45,6 +45,7 @@ theme:
     - navigation.top
     - navigation.footer
     - toc.extend
+    - toc.follow
     - content.code.copy
     - content.code.select
     - content.code.annotate
