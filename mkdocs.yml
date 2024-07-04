@@ -1,6 +1,6 @@
 # Page information
-site_name: Data Engineering Notes
-site_url: https://karlchris.github.io/data-engineering/
+site_name: Data Engineering Works
+site_url: https://karlchris.github.io/dew/
 site_author: Karl Christian
 site_description: >-
   All you need to know about Data Engineering, Data Warehousing and Data Platform.
@@ -10,7 +10,7 @@ copyright: >
   Copyright &copy; 2024 Karl Christian
 
 # Repository
-repo_url: https://github.com/karlchris/data-engineering
+repo_url: https://github.com/karlchris/dew
 repo_name: karlchris/data-engineering
 
 # Configuration
