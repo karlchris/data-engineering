@@ -177,6 +177,7 @@ nav:
     - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
     - Apache Iceberg and PySpark: 'projects/spark-iceberg.md'
     - Delta Lake with Apache Spark: 'projects/delta-spark.md'
+    - Apache Hudi and Spark: 'projects/spark-hudi.md'
 
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
