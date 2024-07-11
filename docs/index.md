@@ -1,4 +1,4 @@
-# Data Engineering Notes
+# Data Engineering Works
 
 Hello everyone :wave:
 
@@ -16,6 +16,14 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 
 ## Overview
 
+!!! tip
+
+    First, I bring up some exciting projects about data engineering, check it out here [**PROJECTS**](projects/README.md).
+
+> I assure it's easy to follow even for beginners.
+
+If you want to deep dive into the topics and get basic/advance understandings, I suggest you go through the **learning** tabs, such as below:
+
 - Data Engineering
 - Data Modeling
 - Data Architecture
@@ -25,8 +33,6 @@ I have experiences as **data engineer**, **data warehousing** and about **analyt
 - Data Quality
 - Learning Python
 - Many more
-
-I also bring up the exciting [projects](projects/README.md) for Data Engineering
 
 Stay tune to this notes, I will keep updating it to the most recent Data Engineering updates.
 

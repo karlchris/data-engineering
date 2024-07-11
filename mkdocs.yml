@@ -1,11 +1,19 @@
-site_name: Data Engineering Notes
+# Page information
+site_name: Data Engineering Works
 site_url: https://karlchris.github.io/data-engineering/
+site_author: Karl Christian
+site_description: >-
+  All you need to know about Data Engineering, Data Warehousing and Data Platform.
 
-copyright: Copyright &copy; 2024 Karl Christian
+# Copyright
+copyright: >
+  Copyright &copy; 2024 Karl Christian
 
-# Github spec
+# Repository
 repo_url: https://github.com/karlchris/data-engineering
+repo_name: karlchris/data-engineering
 
+# Configuration
 theme:
   name: material
 
@@ -14,6 +22,9 @@ theme:
 
   icon:
     annotation: material/plus-circle
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
 
   font:
     text: Fira Sans
@@ -34,10 +45,13 @@ theme:
     - navigation.top
     - navigation.footer
     - toc.extend
+    - toc.follow
     - content.code.copy
     - content.code.select
     - content.code.annotate
     - content.tabs.link
+    - content.action.edit
+    - content.action.view
     - search.suggest
     - search.highlight
     - search.share
@@ -66,7 +80,7 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
 
-
+# Extensions
 markdown_extensions:
   - admonition
   - attr_list
@@ -103,7 +117,33 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 
+# Additional configuration
 extra:
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+
+  analytics:
+    provider: google
+    property: G-
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/thumb-up-outline
+          name: this page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/thumb-down-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve this page by
+
   social:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/karllchris
@@ -112,9 +152,33 @@ extra:
     - icon: fontawesome/brands/medium
       link: https://medium.com/@karl.christian
 
-# Pages Navigations
+# Plugins
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: date
+  - git-committers:
+      repository: karlchris/data-engineering
+      branch: master
+  - search
+
+# Pages tree
 nav:
-  - Preface: 'index.md'
+  - Home: 'index.md'
+
+  - Projects:
+    - List of Projects: 'projects/README.md'
+    - Running dbt and BigQuery using Docker: 'projects/dbt-bq.md'
+    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
+    - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
+    - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
+    - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
+    - Running Spark using Docker Compose: 'projects/spark-docker.md'
+    - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
+    - Apache Iceberg and PySpark: 'projects/spark-iceberg.md'
+    - Delta Lake with Apache Spark: 'projects/delta-spark.md'
+    - Apache Hudi and Spark: 'projects/spark-hudi.md'
+    - Building Machine Learning Pipeline using MLflow on Kubernetes: 'projects/mlflow-k8s.md'
 
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
@@ -191,16 +255,5 @@ nav:
       - CPU Scaling: 'learning-python/scaling-python/cpu-scaling/README.md'
       - Asynchronous Events: 'learning-python/scaling-python/async-solution/README.md'
       - Queue-based Distribution: 'learning-python/scaling-python/queue-distribution/README.md'
-  
-  - Projects:
-    - List of Projects: 'projects/README.md'
-    - Running dbt and BigQuery using Docker: 'projects/dbt-bq.md'
-    - Automated Data Quality Testing with Great Expectations and BigQuery: 'projects/great-expectations-bq.md'
-    - Deploying and Running Airflow on Kubernetes: 'projects/airflow-k8s.md'
-    - Building Github Pages using Github Actions: 'projects/gh-pages-gh-actions.md'
-    - Running Apache Flink on Kubernetes: 'projects/flink-k8s.md'
-    - Running Spark using Docker Compose: 'projects/spark-docker.md'
-    - Querying Streaming Data in Kafka using ksql: 'projects/kafka-ksql.md'
-    - Building Machine Learning Pipeline using MLflow on Kubernetes: 'projects/mlflow-k8s.md'
 
   - About me: 'author.md'
