@@ -178,6 +178,7 @@ nav:
     - Apache Iceberg and PySpark: 'projects/spark-iceberg.md'
     - Delta Lake with Apache Spark: 'projects/delta-spark.md'
     - Apache Hudi and Spark: 'projects/spark-hudi.md'
+    - Building Machine Learning Pipeline using MLflow on Kubernetes: 'projects/mlflow-k8s.md'
 
   - Data Engineering:
     - What is Data Engineering?: 'data-engineering/README.md'
