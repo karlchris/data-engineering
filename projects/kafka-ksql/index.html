@@ -1,0 +1,4121 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="All you need to know about Data Engineering, Data Warehousing and Data Platform.">
+      
+      
+        <meta name="author" content="Karl Christian">
+      
+      
+        <link rel="canonical" href="https://karlchris.github.io/data-engineering/projects/kafka-ksql/">
+      
+      
+        <link rel="prev" href="../spark-docker/">
+      
+      
+        <link rel="next" href="../spark-iceberg/">
+      
+      
+      <link rel="icon" href="../../assets/img/sqldeveloper-original.svg">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.24">
+    
+    
+      
+        <title>Querying Streaming Data in Kafka using ksql - Data Engineering Works</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+  
+  
+  
+  
+  <style>:root{--md-annotation-icon:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 13h-4v4h-2v-4H7v-2h4V7h2v4h4m-5-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2Z"/></svg>');}</style>
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+  
+    <script>var consent;"undefined"==typeof __md_analytics||(consent=__md_get("__consent"))&&consent.analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#querying-streaming-data-in-kafka-using-ksql" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Data Engineering Works" class="md-header__button md-logo" aria-label="Data Engineering Works" data-md-component="logo">
+      
+  <img src="../../assets/img/sqldeveloper-original.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Data Engineering Works
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Querying Streaming Data in Kafka using ksql
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/karlchris/data-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    karlchris/data-engineering
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-engineering/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Engineering
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-modeling/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Modeling
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-ingestion/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Ingestion
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-architecture/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-orchestration/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Orchestration
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-processing/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Processing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../data-quality/" class="md-tabs__link">
+          
+  
+    
+  
+  Data Quality
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../learning-python/" class="md-tabs__link">
+          
+  
+    
+  
+  Python
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../author/" class="md-tabs__link">
+        
+  
+    
+  
+  About me
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Data Engineering Works" class="md-nav__button md-logo" aria-label="Data Engineering Works" data-md-component="logo">
+      
+  <img src="../../assets/img/sqldeveloper-original.svg" alt="logo">
+
+    </a>
+    Data Engineering Works
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/karlchris/data-engineering" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    karlchris/data-engineering
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Projects
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Projects
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dbt-bq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running dbt and BigQuery using Docker
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../great-expectations-bq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automated Data Quality Testing with Great Expectations and BigQuery
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../airflow-k8s/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deploying and Running Airflow on Kubernetes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gh-pages-gh-actions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Building Github Pages using Github Actions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flink-k8s/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running Apache Flink on Kubernetes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-docker/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Running Spark using Docker Compose
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Querying Streaming Data in Kafka using ksql
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Querying Streaming Data in Kafka using ksql
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Kafka
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kafka-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kafka Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Capabilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confluent-and-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confluent and Kafka
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kafka Streams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ksqldb-for-querying" class="md-nav__link">
+    <span class="md-ellipsis">
+      ksqlDB for Querying
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Start
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-kafka-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Create Kafka Topics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generate-mock-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Generate Mock Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-create-a-stream-and-table-using-sql-statements" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Create a Stream and Table using SQL statements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Create a Stream and Table using SQL statements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inspect-the-schemas-of-your-stream-and-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect the schemas of your stream and table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-queries-to-process-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create queries to process data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Create queries to process data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-for-pageviews" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query for pageviews
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joining-data-from-stream-and-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Joining data from Stream and Table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-a-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filter a stream
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-windowed-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a windowed view
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshot-a-table-by-using-a-pull-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Snapshot a table by using a pull query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspect-your-streams-and-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect your streams and tables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-visualize-stream-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Visualize stream topology
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Clean up
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-iceberg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache Iceberg and PySpark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../delta-spark/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Delta Lake with Apache Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spark-hudi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apache Hudi and Spark
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../duckdb-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DuckDB Quick Start using Jupyter Notebook
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-engineering/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Engineering
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Data Engineering
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-engineering/ingestion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ingestion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-engineering/transformation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-engineering/visualization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Visualization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-engineering/storage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Storage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-engineering/dataops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DataOps/Security/Infrastructure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-modeling/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Modeling
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Data Modeling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-modeling/dimensional-modeling/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Dimensional Modeling
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Dimensional Modeling
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-modeling/dimensional-modeling/challenge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Challenge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-modeling/ddl-vs-dml/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DDL vs. DML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-modeling/query-lifecycle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Query Life Cycle
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-ingestion/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Ingestion
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Data Ingestion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/batch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Batch Ingestion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/streaming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Streaming Ingestion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/push-pull/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Push vs. Pull
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Methods
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            Methods
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/methods/sftp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Secure File Transfer Protocol (SFTP)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/methods/api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Application Programming Interface (API)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/methods/object-storage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Object Storage
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/methods/cdc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change Data Capture (CDC)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-ingestion/methods/streaming-platform/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Streaming Platform
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-architecture/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Architecture
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Data Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-architecture/framework-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Framework Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-architecture/storage-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Storage Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-orchestration/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Orchestration
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Data Orchestration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-orchestration/airflow/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Airflow
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            Airflow
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-orchestration/airflow/airflow-dag-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Airflow DAG Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-orchestration/dbt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Build Tool (dbt)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-processing/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Processing
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Data Processing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-processing/apache-spark/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Apache Spark
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Apache Spark
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-processing/apache-spark/spark-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spark Optimizations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-processing/bigquery/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Google BigQuery
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Google BigQuery
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../data-quality/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Data Quality
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_9" id="__nav_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Data Quality
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data-quality/dbt-test/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    dbt test
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learning-python/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10" id="__nav_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_2" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learning-python/oop/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Object Oriented Programming
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10_2" id="__nav_10_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_2">
+            <span class="md-nav__icon md-icon"></span>
+            Object Oriented Programming
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/oop/class/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Class
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/oop/encapsulation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encapsulation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/oop/inheritance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inheritance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/oop/polymorphism/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Polymorphism
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/oop/object-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Object Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/functional-programming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Functional Programming
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learning-python/unit-testing/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Unit Testing
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10_4" id="__nav_10_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_4">
+            <span class="md-nav__icon md-icon"></span>
+            Unit Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/assertion/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertion
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/exceptions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exceptions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/fixtures/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fixtures
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/decorator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Decorator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/parametrizing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parametrizing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/unit-testing/mocking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Mocking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10_5" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../learning-python/scaling-python/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Scaling Python
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_10_5" id="__nav_10_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_5">
+            <span class="md-nav__icon md-icon"></span>
+            Scaling Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/scaling-python/cpu-scaling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPU Scaling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/scaling-python/async-solution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Asynchronous Events
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../learning-python/scaling-python/queue-distribution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Queue-based Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../author/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    About me
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      What is Kafka
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What is Kafka">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kafka-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kafka Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Capabilities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Challenges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confluent-and-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confluent and Kafka
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kafka Streams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ksqldb-for-querying" class="md-nav__link">
+    <span class="md-ellipsis">
+      ksqlDB for Querying
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Start
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Start">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-kafka-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Create Kafka Topics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-generate-mock-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Generate Mock Data
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-create-a-stream-and-table-using-sql-statements" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Create a Stream and Table using SQL statements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Create a Stream and Table using SQL statements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inspect-the-schemas-of-your-stream-and-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect the schemas of your stream and table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-queries-to-process-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create queries to process data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Create queries to process data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-for-pageviews" class="md-nav__link">
+    <span class="md-ellipsis">
+      Query for pageviews
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#joining-data-from-stream-and-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      Joining data from Stream and Table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-a-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filter a stream
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-windowed-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create a windowed view
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#snapshot-a-table-by-using-a-pull-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Snapshot a table by using a pull query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inspect-your-streams-and-tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspect your streams and tables
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-visualize-stream-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Visualize stream topology
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-clean-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Clean up
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/karlchris/data-engineering/edit/master/docs/projects/kafka-ksql.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/karlchris/data-engineering/raw/master/docs/projects/kafka-ksql.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="querying-streaming-data-in-kafka-using-ksql">Querying Streaming Data in Kafka using ksql<a class="headerlink" href="#querying-streaming-data-in-kafka-using-ksql" title="Permanent link">#</a></h1>
+<p>Let's discuss about how data streaming ingestion looks like and how we can query those data using ksql.</p>
+<h2 id="what-is-kafka">What is Kafka<a class="headerlink" href="#what-is-kafka" title="Permanent link">#</a></h2>
+<p>Apache Kafka is an <strong>open-source</strong>, <strong>distributed</strong>, <strong>event streaming</strong> platform capable of handling large volumes of <strong>real-time</strong> data. You use Kafka to build real-time streaming applications.</p>
+<h3 id="kafka-components">Kafka Components<a class="headerlink" href="#kafka-components" title="Permanent link">#</a></h3>
+<p><img alt="kafka-components" src="../pics/kafka-components.png" /></p>
+<ul>
+<li><strong>Kafka Cluster</strong></li>
+</ul>
+<p>A Kafka cluster is a system that comprises of different brokers, topics, and their respective partitions. Data is written to the topic within the cluster and read by the cluster itself.</p>
+<ul>
+<li><strong>Producers</strong></li>
+</ul>
+<p>A producer sends or writes data/messages to the topic within the cluster. In order to store a huge amount of data, different producers within an application send data to the Kafka cluster.</p>
+<ul>
+<li><strong>Consumers</strong></li>
+</ul>
+<p>A consumer is the one that reads or consumes messages from the Kafka cluster. There can be several consumers consuming different types of data form the cluster. The beauty of Kafka is that each consumer knows from where it needs to consume the data.</p>
+<ul>
+<li><strong>Brokers</strong></li>
+</ul>
+<p>A Kafka server is known as a broker. A broker is a bridge between producers and consumers. If a producer wishes to write data to the cluster, it is sent to the Kafka server. All brokers lie within a Kafka cluster itself. Also, there can be multiple brokers.</p>
+<ul>
+<li><strong>Topics</strong></li>
+</ul>
+<p>It is a common name or a heading given to represent a similar type of data. In Apache Kafka, there can be multiple topics in a cluster. Each topic specifies different types of messages.</p>
+<ul>
+<li><strong>Partitions</strong></li>
+</ul>
+<p>The data or message is divided into small subparts, known as partitions. Each partition carries data within it having an offset value.</p>
+<h3 id="the-capabilities">The Capabilities<a class="headerlink" href="#the-capabilities" title="Permanent link">#</a></h3>
+<ul>
+<li>At the core of Kafka is the <strong>Kafka broker</strong>. A broker stores data in a durable way from clients in one or more topics that can be consumed by one or more clients. Kafka also provides several command-line tools that enable you to start and stop Kafka, create topics and more.</li>
+<li>Kafka provides security features such as <strong>data encryption</strong> between producers and consumers and brokers using SSL / TLS.</li>
+<li>
+<p>Support of the following <strong>Java APIs</strong></p>
+<ul>
+<li>The <strong>Producer API</strong> that enables an application to send messages to Kafka.</li>
+<li>The <strong>Consumer API</strong> that enables an application to subscribe to one or more topics and process the stream of records produced to them.</li>
+<li><strong>Kafka Connect</strong>, a component that you can use to stream data between Kafka and other data systems in a scalable and reliable way. It makes it simple to configure connectors to move data into and out of Kafka.</li>
+<li>The <strong>Streams API</strong> that enables applications to act as a stream processor, consuming an input stream from one or more topics and producing an output stream to one or more output topics, effectively transforming the input streams to output streams.</li>
+<li>The <strong>Admin API</strong> that provides the capability to create, inspect, delete, and manage topics, brokers, ACLs, and other Kafka objects.</li>
+</ul>
+</li>
+</ul>
+<h3 id="challenges">Challenges<a class="headerlink" href="#challenges" title="Permanent link">#</a></h3>
+<ul>
+<li>Must have high-throughput to support high volume event streams such as real-time log aggregation.</li>
+<li>Requires the ability to gracefully deal with large data backlogs in order to support periodic data loads from offline systems.</li>
+<li>Must handle low-latency delivery for more traditional messaging use-cases.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The goal for Kafka is to support partitioned, distributed, real-time processing feeds to create new, derived feeds.
+This motivated Kafka’s partitioning and consumer model.</p>
+<p>Finally in cases where the stream is fed into other data systems for serving, it was important that the system would guarantee <strong>fault-tolerance</strong> in case of machine failures.</p>
+</div>
+<h3 id="confluent-and-kafka">Confluent and Kafka<a class="headerlink" href="#confluent-and-kafka" title="Permanent link">#</a></h3>
+<p><strong>Confluent</strong> is a commercial, global corporation that specializes in providing businesses with real-time access to data.
+Confluent was founded by the creators of Kafka, and its product line includes proprietary products based on open-source Kafka.</p>
+<p><img alt="confluent" src="../pics/confluent.png" /></p>
+<p>At the core of Confluent Platform is Kafka, the most popular open source distributed streaming platform. Kafka enables you to:</p>
+<ul>
+<li><strong>Publish</strong> and <strong>subscribe</strong> to streams of records</li>
+<li><strong>Store</strong> streams of records in a fault tolerant way</li>
+<li><strong>Process</strong> streams of records</li>
+</ul>
+<p>Each Confluent Platform release includes the latest release of Kafka and additional tools and services that make it easier to build and manage an event streaming platform.
+Confluent Platform provides community and commercially licensed features such as Schema Registry, Cluster Linking, a REST Proxy, 100+ pre-built Kafka connectors, and ksqlDB.</p>
+<h3 id="use-cases">Use Cases<a class="headerlink" href="#use-cases" title="Permanent link">#</a></h3>
+<p>Consider an application that uses Kafka topics as a backend to store and retrieve posts, likes, and comments from a popular social media site. The application incorporates producers and consumers that subscribe to those Kafka topics.</p>
+<ul>
+<li>When a user of the application publishes a post, likes something, or comments, the Kafka producer code in the application sends that data to the associated topic.</li>
+<li>When the user navigates to a particular page in the application, a Kafka consumer reads from the associated backend topic and the application renders data on the user’s device.</li>
+</ul>
+<h2 id="kafka-streams">Kafka Streams<a class="headerlink" href="#kafka-streams" title="Permanent link">#</a></h2>
+<p><img alt="kafka-streams" src="../pics/kafka-streams.png" /></p>
+<p>Kafka Streams is a client library for building applications and microservices, where the input and output data are stored in an Apache Kafka® cluster.
+It combines the simplicity of writing and deploying standard Java and Scala applications on the client side with the benefits of Kafka’s server-side cluster technology.</p>
+<h2 id="ksqldb-for-querying">ksqlDB for Querying<a class="headerlink" href="#ksqldb-for-querying" title="Permanent link">#</a></h2>
+<p>ksqlDB is the streaming SQL engine for Kafka that you can use to perform stream processing tasks using SQL statements.</p>
+<p><img alt="ksql" src="../pics/ksql.png" /></p>
+<p>Some of its features:</p>
+<ul>
+<li>Create real-time value by processing data in motion rather than data at rest.</li>
+<li>Simplify your stream processing architecture.</li>
+<li>Start building real-time applications with simple SQL syntax, as below example.</li>
+</ul>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">activePromotions</span><span class="w"> </span><span class="k">AS</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">rideId</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">            </span><span class="n">qualityPromotion</span><span class="p">(</span><span class="n">distanceToDst</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">promotion</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">locations</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rideId</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span>
+</span></code></pre></div>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">#</a></h2>
+<p>Use this quick start to get up and running locally with Confluent Platform and its main components using Docker containers.</p>
+<p>In this quick start, you will create Apache Kafka topics, use Kafka Connect to generate mock data to those topics, and create ksqlDB streaming queries on those topics.
+You then go to Confluent Control Center to monitor and analyze the event streaming queries.
+When you finish, you’ll have a real-time app that consumes and processes data streams by using familiar SQL statements.</p>
+<div class="admonition warning">
+<p class="admonition-title">must have</p>
+<p>Before starting this project, you need to install some prerequisites in your laptop:</p>
+<ul>
+<li><a href="https://docs.docker.com/engine/install/">Docker</a></li>
+</ul>
+</div>
+<p>First, you need to clone the repo.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:karlchris/kafka-docker.git
+</span></code></pre></div>
+<p>then, run below command to initialize the apps and its resources.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>make<span class="w"> </span>up
+</span></code></pre></div>
+<p>This will launch several containers.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span>➜<span class="w">  </span>kafka-docker<span class="w"> </span>git:<span class="o">(</span>main<span class="o">)</span><span class="w"> </span>dpsa
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>CONTAINER<span class="w"> </span>ID<span class="w">   </span>IMAGE<span class="w">                                             </span>COMMAND<span class="w">                  </span>CREATED<span class="w">             </span>STATUS<span class="w">             </span>PORTS<span class="w">                                            </span>NAMES
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>cb4f8fb1d3c5<span class="w">   </span>confluentinc/ksqldb-examples:7.6.1<span class="w">                </span><span class="s2">&quot;bash /root/datagen_…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">                                                    </span>ksql-datagen
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>c132b535cfed<span class="w">   </span>confluentinc/cp-ksqldb-cli:7.6.1<span class="w">                  </span><span class="s2">&quot;/bin/sh&quot;</span><span class="w">                </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">                                                    </span>ksqldb-cli
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>515344724de1<span class="w">   </span>confluentinc/cp-enterprise-control-center:7.6.1<span class="w">   </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:9021-&gt;9021/tcp<span class="w">                           </span>control-center
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>1f3a2ce862b1<span class="w">   </span>confluentinc/cp-ksqldb-server:7.6.1<span class="w">               </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:8088-&gt;8088/tcp<span class="w">                           </span>ksqldb-server
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>d0d7b2abe0e4<span class="w">   </span>cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0<span class="w">   </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:8083-&gt;8083/tcp,<span class="w"> </span><span class="m">9092</span>/tcp<span class="w">                 </span>connect
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>915a1c8552e3<span class="w">   </span>confluentinc/cp-kafka-rest:7.6.1<span class="w">                  </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:8082-&gt;8082/tcp<span class="w">                           </span>rest-proxy
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>8df2fc0e9c7a<span class="w">   </span>confluentinc/cp-schema-registry:7.6.1<span class="w">             </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:8081-&gt;8081/tcp<span class="w">                           </span>schema-registry
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>640b67c01686<span class="w">   </span>provectuslabs/kafka-ui:latest<span class="w">                     </span><span class="s2">&quot;/bin/sh -c &#39;java --…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:8080-&gt;8080/tcp<span class="w">                           </span>kafka-ui
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>bee8cb1574bc<span class="w">   </span>confluentinc/cp-kafka:7.6.1<span class="w">                       </span><span class="s2">&quot;/etc/confluent/dock…&quot;</span><span class="w">   </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span>About<span class="w"> </span>an<span class="w"> </span>hour<span class="w">   </span><span class="m">0</span>.0.0.0:9092-&gt;9092/tcp,<span class="w"> </span><span class="m">0</span>.0.0.0:9101-&gt;9101/tcp<span class="w">   </span>broker
+</span></code></pre></div>
+<h3 id="1-create-kafka-topics">1. Create Kafka Topics<a class="headerlink" href="#1-create-kafka-topics" title="Permanent link">#</a></h3>
+<ul>
+<li>Open <code>http://localhost:9021</code></li>
+<li>Click <strong>controlcenter.cluster</strong></li>
+</ul>
+<p><img alt="controlcenter.cluster" src="../pics/controlcenter.cluster.png" /></p>
+<p>Cluster overview</p>
+<p><img alt="cluster-overview" src="../pics/cluster-overview.png" /></p>
+<ul>
+<li>In navigation menu, click <strong>Topics</strong>. Then, Create topic <code>pageviews</code> and <code>users</code>, rest click <strong>Create with defaults</strong></li>
+</ul>
+<p><img alt="topic-view" src="../pics/topic-view.png" /></p>
+<h3 id="2-generate-mock-data">2. Generate Mock Data<a class="headerlink" href="#2-generate-mock-data" title="Permanent link">#</a></h3>
+<ul>
+<li>In navigation menu click <strong>Connect</strong>.</li>
+<li>Click <code>connect-default</code> cluster in the <strong>Connect cluster</strong> list.</li>
+<li>Click <strong>Add connector</strong>.</li>
+<li>Select <code>DatagenConnector</code> tile.</li>
+<li>In the <strong>Name</strong> field, enter <code>datagen-pageviews</code> as the name of connector.</li>
+<li>Enter the following configuration values in the following sections:</li>
+</ul>
+<p><strong>Common</strong> section:</p>
+<p><code>Key converter class</code>: <code>org.apache.kafka.connect.storage.StringConverter</code></p>
+<p><strong>General</strong> section:</p>
+<p><code>kafka.topic</code>: Choose <code>pageviews</code> from the dropdown menu
+<code>max.interval</code>: <code>100</code>
+<code>quickstart</code>: <code>pageviews</code></p>
+<ul>
+<li>Click <strong>Next</strong> to review the configurations, then click <strong>Launch</strong>.</li>
+</ul>
+<div class="language-json highlight"><span class="filename">datagen-pageviews</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;datagen-pageviews&quot;</span><span class="p">,</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;datagen-pageviews&quot;</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&quot;connector.class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;io.confluent.kafka.connect.datagen.DatagenConnector&quot;</span><span class="p">,</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="nt">&quot;key.converter&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org.apache.kafka.connect.storage.StringConverter&quot;</span><span class="p">,</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&quot;kafka.topic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pageviews&quot;</span><span class="p">,</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">&quot;max.interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;100&quot;</span><span class="p">,</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nt">&quot;quickstart&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pageviews&quot;</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<ul>
+<li>Repeat above steps to create <code>datagen-users</code> for users mock data with below configurations.</li>
+</ul>
+<div class="language-json highlight"><span class="filename">datagen-users</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;datagen-users&quot;</span><span class="p">,</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">&quot;config&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;datagen-users&quot;</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">&quot;connector.class&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;io.confluent.kafka.connect.datagen.DatagenConnector&quot;</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">&quot;key.converter&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;org.apache.kafka.connect.storage.StringConverter&quot;</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="nt">&quot;kafka.topic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;users&quot;</span><span class="p">,</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">&quot;max.interval&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1000&quot;</span><span class="p">,</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">&quot;quickstart&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;users&quot;</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><img alt="kafka-connectors" src="../pics/kafka-connectors.png" /></p>
+<h3 id="3-create-a-stream-and-table-using-sql-statements">3. Create a Stream and Table using SQL statements<a class="headerlink" href="#3-create-a-stream-and-table-using-sql-statements" title="Permanent link">#</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A <strong>stream</strong> is a an immutable, append-only collection that represents a series of historical facts, or events.</p>
+<p>A <strong>table</strong> is a mutable collection that models change over time. It uses row keys to display the most recent data for each key.</p>
+</div>
+<ul>
+<li>In the navigation menu, click <strong>ksqlDB</strong>.</li>
+<li>Click <code>ksqldb1</code> cluster to open <strong>ksqldb1</strong> page.</li>
+<li>Run this SQL statements</li>
+</ul>
+<div class="language-sql highlight"><span class="filename">create_pageviews_stream.sql</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="n">STREAM</span><span class="w"> </span><span class="n">pageviews_stream</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">KAFKA_TOPIC</span><span class="o">=</span><span class="s1">&#39;pageviews&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE_FORMAT</span><span class="o">=</span><span class="s1">&#39;AVRO&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;currentStatus&quot;</span><span class="p">,</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">&quot;statementText&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CREATE STREAM PAGEVIEWS_STREAM (VIEWTIME BIGINT, USERID STRING, PAGEID STRING) WITH (CLEANUP_POLICY=&#39;delete&#39;, KAFKA_TOPIC=&#39;pageviews&#39;, KEY_FORMAT=&#39;KAFKA&#39;, VALUE_FORMAT=&#39;AVRO&#39;);&quot;</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">&quot;commandId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stream/`PAGEVIEWS_STREAM`/create&quot;</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">  </span><span class="nt">&quot;commandStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Stream created&quot;</span><span class="p">,</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="nt">&quot;queryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="nt">&quot;commandSequenceNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="language-sql highlight"><span class="filename">view_pageviews_stream.sql</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_stream</span><span class="w"> </span><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="pageviews-stream" src="../pics/pageviews-stream.png" /></p>
+<ul>
+<li>you can click <strong>Stop</strong> to end the SELECT query.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Stopping the SELECT query doesn't stop data movement through the stream.</p>
+</div>
+<div class="language-sql highlight"><span class="filename">create_users_table.sql</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">users_table</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">)</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">KAFKA_TOPIC</span><span class="o">=</span><span class="s1">&#39;users&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE_FORMAT</span><span class="o">=</span><span class="s1">&#39;AVRO&#39;</span><span class="p">);</span>
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;currentStatus&quot;</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;statementText&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CREATE TABLE USERS_TABLE (ID STRING PRIMARY KEY, REGISTERTIME BIGINT, USERID STRING, REGIONID STRING, GENDER STRING) WITH (CLEANUP_POLICY=&#39;compact&#39;, KAFKA_TOPIC=&#39;users&#39;, KEY_FORMAT=&#39;KAFKA&#39;, VALUE_FORMAT=&#39;AVRO&#39;);&quot;</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;commandId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;table/`USERS_TABLE`/create&quot;</span><span class="p">,</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nt">&quot;commandStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Table created&quot;</span><span class="p">,</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="nt">&quot;queryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">  </span><span class="nt">&quot;commandSequenceNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>A table requires you to specify a PRIMARY KEY when you register it.</p>
+</div>
+<h4 id="inspect-the-schemas-of-your-stream-and-table">Inspect the schemas of your stream and table<a class="headerlink" href="#inspect-the-schemas-of-your-stream-and-table" title="Permanent link">#</a></h4>
+<ul>
+<li>Click <strong>Streams</strong> to see the currently registered streams. In the list, click <strong>PAGEVIEWS_STREAM</strong> to see details.</li>
+</ul>
+<p><img alt="pageviews-stream-schema" src="../pics/pageviews-stream-schema.png" /></p>
+<ul>
+<li>Click <strong>Tables</strong> to see the currently registered tables. In the list, click <strong>USERS_TABLE</strong> to see details.</li>
+</ul>
+<p><img alt="users-table-schema" src="../pics/users-table-schema.png" /></p>
+<h4 id="create-queries-to-process-data">Create queries to process data<a class="headerlink" href="#create-queries-to-process-data" title="Permanent link">#</a></h4>
+<p>Different kinds of queries:</p>
+<ul>
+<li><strong>Transient query</strong></li>
+</ul>
+<p>a non-persistent, client-side query that you terminate manually or with a LIMIT clause. A transient query doesn’t create a new topic.</p>
+<ul>
+<li><strong>Persistent query</strong></li>
+</ul>
+<p>a server-side query that outputs a new stream or table that’s backed by a new topic. It runs until you issue the <code>TERMINATE</code> statement.</p>
+<ul>
+<li><strong>Push query</strong></li>
+</ul>
+<p>A query that produces results continuously to a subscription. The syntax for a push query uses the <code>EMIT CHANGES</code> keyword. Push queries can be transient or persistent.</p>
+<ul>
+<li><strong>Pull query</strong></li>
+</ul>
+<p>A query that gets a result as of “now”, like a query against a traditional relational database. A pull query runs once and returns the current state of a table. Pull queries are always transient.</p>
+<h5 id="query-for-pageviews">Query for pageviews<a class="headerlink" href="#query-for-pageviews" title="Permanent link">#</a></h5>
+<p>Run this query to view the pageID.</p>
+<div class="language-sql highlight"><span class="filename">query-pageviews.sql</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">pageid</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_stream</span><span class="w"> </span><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="pageid-pageviews-stream" src="../pics/pageid-pageviews-stream.png" /></p>
+<h5 id="joining-data-from-stream-and-table">Joining data from Stream and Table<a class="headerlink" href="#joining-data-from-stream-and-table" title="Permanent link">#</a></h5>
+<p>This join enriches pageview data with information about the user who viewed the page. The joined rows are written to a new sink topic, which has the same name as the new stream, by default.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can specify the name of the sink topic by using the <code>KAFKA_TOPIC</code> keyword in a <code>WITH</code> clause.</p>
+</div>
+<p>Run below query to create the joined stream.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="n">STREAM</span><span class="w"> </span><span class="n">user_pageviews</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">  </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">users_table</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">userid</span><span class="p">,</span><span class="w"> </span><span class="n">pageid</span><span class="p">,</span><span class="w"> </span><span class="n">regionid</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_stream</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">users_table</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">pageviews_stream</span><span class="p">.</span><span class="n">userid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">users_table</span><span class="p">.</span><span class="n">id</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;currentStatus&quot;</span><span class="p">,</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">&quot;statementText&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CREATE STREAM USER_PAGEVIEWS WITH (CLEANUP_POLICY=&#39;delete&#39;, KAFKA_TOPIC=&#39;USER_PAGEVIEWS&#39;, PARTITIONS=1, REPLICAS=1, RETENTION_MS=604800000) AS SELECT\n  USERS_TABLE.ID USERID,\n  PAGEVIEWS_STREAM.PAGEID PAGEID,\n  USERS_TABLE.REGIONID REGIONID,\n  USERS_TABLE.GENDER GENDER\nFROM PAGEVIEWS_STREAM PAGEVIEWS_STREAM\nLEFT OUTER JOIN USERS_TABLE USERS_TABLE ON ((PAGEVIEWS_STREAM.USERID = USERS_TABLE.ID))\nEMIT CHANGES;&quot;</span><span class="p">,</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">&quot;commandId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stream/`USER_PAGEVIEWS`/create&quot;</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nt">&quot;commandStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Created query with ID CSAS_USER_PAGEVIEWS_5&quot;</span><span class="p">,</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">    </span><span class="nt">&quot;queryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CSAS_USER_PAGEVIEWS_5&quot;</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">  </span><span class="nt">&quot;commandSequenceNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The query uses the <code>EMIT CHANGES</code> syntax, which indicates that this is a push query.</p>
+<p>A push query enables you to query a stream or table with a subscription to the results. It continues until you stop it.</p>
+</div>
+<p>Click <strong>Stop</strong> to end the transient push query.</p>
+<h5 id="filter-a-stream">Filter a stream<a class="headerlink" href="#filter-a-stream" title="Permanent link">#</a></h5>
+<p>You will create a stream, named <code>pageviews_region_like_89</code>, which is made of <code>user_pageviews</code> rows that have a <code>regionid</code> value that ends with <code>8</code> or <code>9</code>.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="n">STREAM</span><span class="w"> </span><span class="n">pageviews_region_like_89</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">KAFKA_TOPIC</span><span class="o">=</span><span class="s1">&#39;pageviews_filtered_r8_r9&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">VALUE_FORMAT</span><span class="o">=</span><span class="s1">&#39;AVRO&#39;</span><span class="p">)</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_pageviews</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">regionid</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%_8&#39;</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">regionid</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;%_9&#39;</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;currentStatus&quot;</span><span class="p">,</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">&quot;statementText&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CREATE STREAM PAGEVIEWS_REGION_LIKE_89 WITH (CLEANUP_POLICY=&#39;delete&#39;, KAFKA_TOPIC=&#39;pageviews_filtered_r8_r9&#39;, PARTITIONS=1, REPLICAS=1, RETENTION_MS=604800000, VALUE_FORMAT=&#39;AVRO&#39;) AS SELECT *\nFROM USER_PAGEVIEWS USER_PAGEVIEWS\nWHERE ((USER_PAGEVIEWS.REGIONID LIKE &#39;%_8&#39;) OR (USER_PAGEVIEWS.REGIONID LIKE &#39;%_9&#39;))\nEMIT CHANGES;&quot;</span><span class="p">,</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">&quot;commandId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stream/`PAGEVIEWS_REGION_LIKE_89`/create&quot;</span><span class="p">,</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span><span class="nt">&quot;commandStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Created query with ID CSAS_PAGEVIEWS_REGION_LIKE_89_7&quot;</span><span class="p">,</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="nt">&quot;queryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CSAS_PAGEVIEWS_REGION_LIKE_89_7&quot;</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">  </span><span class="nt">&quot;commandSequenceNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>to view the data, run below query</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_region_like_89</span><span class="w"> </span><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="query-results-filtered" src="../pics/query-results-filtered.png" /></p>
+<h5 id="create-a-windowed-view">Create a windowed view<a class="headerlink" href="#create-a-windowed-view" title="Permanent link">#</a></h5>
+<p>You will create a table named <code>pageviews_per_region_89</code> that counts the number of pageviews from regions <code>8</code> and <code>9</code> in a tumbling window with a SIZE of 30 seconds.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>A tumbling window is a hopping window whose window size is equal to its advance interval.
+Since tumbling windows never overlap, a data record will belong to one and only one window.</p>
+<p>Reference: <a href="https://docs.confluent.io/platform/7.6/streams/developer-guide/dsl-api.html#windowing-tumbling">Windowing tumbling</a></p>
+</div>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">pageviews_per_region_89</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="p">(</span><span class="n">KEY_FORMAT</span><span class="o">=</span><span class="s1">&#39;JSON&#39;</span><span class="p">)</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="k">AS</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="n">userid</span><span class="p">,</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">regionid</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">numviews</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_region_like_89</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="n">WINDOW</span><span class="w"> </span><span class="n">TUMBLING</span><span class="w"> </span><span class="p">(</span><span class="k">SIZE</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">SECOND</span><span class="p">)</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">gender</span><span class="p">,</span><span class="w"> </span><span class="n">regionid</span><span class="p">,</span><span class="w"> </span><span class="n">userid</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="p">{</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="nt">&quot;@type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;currentStatus&quot;</span><span class="p">,</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span><span class="nt">&quot;statementText&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CREATE TABLE PAGEVIEWS_PER_REGION_89 WITH (CLEANUP_POLICY=&#39;compact,delete&#39;, KAFKA_TOPIC=&#39;PAGEVIEWS_PER_REGION_89&#39;, KEY_FORMAT=&#39;JSON&#39;, PARTITIONS=1, REPLICAS=1, RETENTION_MS=604800000) AS SELECT\n  PAGEVIEWS_REGION_LIKE_89.USERID USERID,\n  PAGEVIEWS_REGION_LIKE_89.GENDER GENDER,\n  PAGEVIEWS_REGION_LIKE_89.REGIONID REGIONID,\n  COUNT(*) NUMVIEWS\nFROM PAGEVIEWS_REGION_LIKE_89 PAGEVIEWS_REGION_LIKE_89\nWINDOW TUMBLING ( SIZE 30 SECONDS ) \nGROUP BY PAGEVIEWS_REGION_LIKE_89.GENDER, PAGEVIEWS_REGION_LIKE_89.REGIONID, PAGEVIEWS_REGION_LIKE_89.USERID\nHAVING (COUNT(*) &gt; 1)\nEMIT CHANGES;&quot;</span><span class="p">,</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="nt">&quot;commandId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;table/`PAGEVIEWS_PER_REGION_89`/create&quot;</span><span class="p">,</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">  </span><span class="nt">&quot;commandStatus&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SUCCESS&quot;</span><span class="p">,</span>
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Created query with ID CTAS_PAGEVIEWS_PER_REGION_89_9&quot;</span><span class="p">,</span>
+</span><span id="__span-18-8"><a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="w">    </span><span class="nt">&quot;queryId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CTAS_PAGEVIEWS_PER_REGION_89_9&quot;</span>
+</span><span id="__span-18-9"><a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-18-10"><a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a><span class="w">  </span><span class="nt">&quot;commandSequenceNumber&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-18-11"><a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a><span class="w">  </span><span class="nt">&quot;warnings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-18-12"><a id="__codelineno-18-12" name="__codelineno-18-12" href="#__codelineno-18-12"></a>
+</span><span id="__span-18-13"><a id="__codelineno-18-13" name="__codelineno-18-13" href="#__codelineno-18-13"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-18-14"><a id="__codelineno-18-14" name="__codelineno-18-14" href="#__codelineno-18-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>to view the data, run below query</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_per_region_89</span><span class="w"> </span><span class="n">EMIT</span><span class="w"> </span><span class="n">CHANGES</span><span class="p">;</span>
+</span></code></pre></div>
+<p><img alt="query-results-windowed" src="../pics/query-results-windowed.png" /></p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>the <strong>NUMVIEWS</strong> column shows the count of views in a 30-second window.</p>
+</div>
+<h5 id="snapshot-a-table-by-using-a-pull-query">Snapshot a table by using a pull query<a class="headerlink" href="#snapshot-a-table-by-using-a-pull-query" title="Permanent link">#</a></h5>
+<p>You can get the current state of a table by using a pull query, which returns rows for a specific key at the time you issue the query.
+A pull query runs once and terminates.</p>
+<p>In this step, you query the <code>pageviews_per_region_89</code> table for all rows that have <code>User_1</code> in <code>Region_9</code>.</p>
+<div class="language-sql highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">pageviews_per_region_89</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">userid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;User_1&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">gender</span><span class="o">=</span><span class="s1">&#39;FEMALE&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">regionid</span><span class="o">=</span><span class="s1">&#39;Region_9&#39;</span><span class="p">;</span>
+</span></code></pre></div>
+<h5 id="inspect-your-streams-and-tables">Inspect your streams and tables<a class="headerlink" href="#inspect-your-streams-and-tables" title="Permanent link">#</a></h5>
+<ul>
+<li>In the upper-right corner of the editor, the <strong>All available streams and tables</strong> panes shows all of the streams and tables that you can access.</li>
+</ul>
+<p><img alt="streams-tables" src="../pics/streams-tables.png" /></p>
+<ul>
+<li>Click <strong>Persistent queries</strong> to inspect the streams and tables that you've created.</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>this page to check whether your queries are running, to explain a query, and to terminate running queries.</p>
+</div>
+<p><img alt="persistent-queries-ui" src="../pics/persistent-queries-ui.png" /></p>
+<h3 id="4-visualize-stream-topology">4. Visualize stream topology<a class="headerlink" href="#4-visualize-stream-topology" title="Permanent link">#</a></h3>
+<p>In the streaming application you’ve built, events flow from the Datagen connectors into the <code>pageviews</code> and <code>users</code> topics.</p>
+<p>Rows are processed with a join and filtered, and in the final step, rows are aggregated in a table view of the streaming data.</p>
+<ul>
+<li>Click <strong>Flow</strong> to open Flow view.</li>
+</ul>
+<p><img alt="stream-topology" src="../pics/stream-topology.png" /></p>
+<h3 id="5-clean-up">5. Clean up<a class="headerlink" href="#5-clean-up" title="Permanent link">#</a></h3>
+<p>Run below command</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>make<span class="w"> </span>down
+</span></code></pre></div>
+<p>Output</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="o">(</span>base<span class="o">)</span><span class="w"> </span>➜<span class="w">  </span>kafka-docker<span class="w"> </span>git:<span class="o">(</span>main<span class="o">)</span><span class="w"> </span>make<span class="w"> </span>down<span class="w"> </span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>--rmi<span class="w"> </span>all
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span><span class="m">19</span>/19
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>ksql-datagen<span class="w">                                 </span>Removed<span class="w">                                                                                                                                                               </span><span class="m">10</span>.2s<span class="w"> </span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>rest-proxy<span class="w">                                   </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.7s<span class="w"> </span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>ksqldb-cli<span class="w">                                   </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.2s<span class="w"> </span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>control-center<span class="w">                               </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.7s<span class="w"> </span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>kafka-ui<span class="w">                                     </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">2</span>.3s<span class="w"> </span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>ksqldb-server<span class="w">                                </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">2</span>.1s<span class="w"> </span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>connect<span class="w">                                      </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">2</span>.6s<span class="w"> </span>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>schema-registry<span class="w">                              </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.7s<span class="w"> </span>
+</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>broker<span class="w">                                       </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.0s<span class="w"> </span>
+</span><span id="__span-22-13"><a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0<span class="w">  </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.1s<span class="w"> </span>
+</span><span id="__span-22-14"><a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-ksqldb-server:7.6.1<span class="w">              </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.1s<span class="w"> </span>
+</span><span id="__span-22-15"><a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-ksqldb-cli:7.6.1<span class="w">                 </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.2s<span class="w"> </span>
+</span><span id="__span-22-16"><a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-schema-registry:7.6.1<span class="w">            </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.3s<span class="w"> </span>
+</span><span id="__span-22-17"><a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/ksqldb-examples:7.6.1<span class="w">               </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.1s<span class="w"> </span>
+</span><span id="__span-22-18"><a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-enterprise-control-center:7.6.1<span class="w">  </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">1</span>.9s<span class="w"> </span>
+</span><span id="__span-22-19"><a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>provectuslabs/kafka-ui:latest<span class="w">                    </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.4s<span class="w"> </span>
+</span><span id="__span-22-20"><a id="__codelineno-22-20" name="__codelineno-22-20" href="#__codelineno-22-20"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-kafka-rest:7.6.1<span class="w">                 </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.3s<span class="w"> </span>
+</span><span id="__span-22-21"><a id="__codelineno-22-21" name="__codelineno-22-21" href="#__codelineno-22-21"></a><span class="w"> </span>✔<span class="w"> </span>Image<span class="w"> </span>confluentinc/cp-kafka:7.6.1<span class="w">                      </span>Removed<span class="w">                                                                                                                                                                </span><span class="m">0</span>.1s<span class="w"> </span>
+</span><span id="__span-22-22"><a id="__codelineno-22-22" name="__codelineno-22-22" href="#__codelineno-22-22"></a><span class="w"> </span>✔<span class="w"> </span>Network<span class="w"> </span>kafka-docker_default<span class="w">                           </span>Removed<span class="w">    </span>
+</span></code></pre></div>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">#</a></h2>
+<ul>
+<li><a href="https://docs.confluent.io/platform/7.6/kafka/kafka-basics.html">Kafka Basics</a></li>
+<li><a href="https://www.javatpoint.com/apache-kafka-architecture#:~:text=Producers%3A%20A%20producer%20sends%20or,messages%20from%20the%20Kafka%20cluster.">Apache Kafka Architecture</a></li>
+<li><a href="https://kafka.apache.org/documentation/#gettingStarted">Official Apache Kafka documentation</a></li>
+</ul>
+
+
+
+
+
+
+
+  
+    
+  
+  
+    
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 13, 2024</span>
+  </span>
+
+    
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Created">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3h-2Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 13, 2024</span>
+  </span>
+
+    
+    
+    
+  </aside>
+
+
+  
+
+
+
+  <form class="md-feedback" name="feedback" hidden>
+    <fieldset>
+      <legend class="md-feedback__title">
+        Was this page helpful?
+      </legend>
+      <div class="md-feedback__inner">
+        <div class="md-feedback__list">
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="this page was helpful" data-md-value="1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 9v12H1V9h4m4 12a2 2 0 0 1-2-2V9c0-.55.22-1.05.59-1.41L14.17 1l1.06 1.06c.27.27.44.64.44 1.05l-.03.32L14.69 8H21a2 2 0 0 1 2 2v2c0 .26-.05.5-.14.73l-3.02 7.05C19.54 20.5 18.83 21 18 21H9m0-2h9.03L21 12v-2h-8.79l1.13-5.32L9 9.03V19Z"/></svg>
+            </button>
+          
+            <button class="md-feedback__icon md-icon" type="submit" title="This page could be improved" data-md-value="0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 15V3h4v12h-4M15 3a2 2 0 0 1 2 2v10c0 .55-.22 1.05-.59 1.41L9.83 23l-1.06-1.06c-.27-.27-.44-.64-.44-1.06l.03-.31.95-4.57H3a2 2 0 0 1-2-2v-2c0-.26.05-.5.14-.73l3.02-7.05C4.46 3.5 5.17 3 6 3h9m0 2H5.97L3 12v2h8.78l-1.13 5.32L15 14.97V5Z"/></svg>
+            </button>
+          
+        </div>
+        <div class="md-feedback__note">
+          
+            <div data-md-value="1" hidden>
+              
+              
+                
+              
+              Thanks for your feedback!
+            </div>
+          
+            <div data-md-value="0" hidden>
+              
+              
+                
+              
+              Thanks for your feedback! Help us improve this page by
+            </div>
+          
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../spark-docker/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Running Spark using Docker Compose">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Running Spark using Docker Compose
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../spark-iceberg/" class="md-footer__link md-footer__link--next" aria-label="Next: Apache Iceberg and PySpark">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Apache Iceberg and PySpark
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Karl Christian
+
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/karllchris" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/karlchris" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://medium.com/@karl.christian" target="_blank" rel="noopener" title="medium.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M180.5 74.262C80.813 74.262 0 155.633 0 256s80.819 181.738 180.5 181.738S361 356.373 361 256 280.191 74.262 180.5 74.262Zm288.25 10.646c-49.845 0-90.245 76.619-90.245 171.095s40.406 171.1 90.251 171.1 90.251-76.619 90.251-171.1H559c0-94.503-40.4-171.095-90.248-171.095Zm139.506 17.821c-17.526 0-31.735 68.628-31.735 153.274s14.2 153.274 31.735 153.274S640 340.631 640 256c0-84.649-14.215-153.271-31.742-153.271Z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+  
+    
+  
+
+
+  
+    
+  
+
+
+
+  
+
+
+<h4>Cookie consent</h4>
+<p>We use cookies to recognize your repeated visits and preferences, as well as to measure the effectiveness of our documentation and whether users find what they're searching for. With your consent, you're helping us to make our documentation better.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="analytics" checked>
+          <span class="task-list-indicator"></span>
+          Google Analytics
+        </label>
+      </li>
+    
+      
+      
+        
+        
+      
+      <li class="task-list-item">
+        <label class="task-list-control">
+          <input type="checkbox" name="github" checked>
+          <span class="task-list-indicator"></span>
+          GitHub
+        </label>
+      </li>
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.instant.preview", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.expand", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "toc.extend", "toc.follow", "content.code.copy", "content.code.select", "content.code.annotate", "content.tabs.link", "content.action.edit", "content.action.view", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.081f42fc.min.js"></script>
+      
+    
+  </body>
+</html>
